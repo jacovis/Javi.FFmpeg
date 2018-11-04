@@ -1,0 +1,35 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+
+        <TextBox Grid.Row="0" x:Name="TextBlockMediaInfo" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+        <Grid Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button Content="Cancel" Height="25" MinWidth="75" Margin="5" Click="Cancel_Click"/>
+                <Button Content="Clear" Height="25" MinWidth="75" Margin="5" Click="Clear_Click"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+                <Button Content="GrabThumbnail" Height="25" MinWidth="75" Margin="5" Click="ButtonGrabThumbnail_Click"/>
+                <Button Content="RetrieveMetaData" Height="25" MinWidth="75" Margin="5" Click="ButtonRetrieveMetaData_Click"/>
+                <Button Content="Extract srt" Height="25" MinWidth="75" Margin="5" Click="ButtonExtractSrt_Click"/>
+                <Button Content="Cut video" Height="25" MinWidth="75" Margin="5" Click="ButtonCutVideo_Click" />
+                <Button Content="Convert EAC" Height="25" MinWidth="75" Margin="5" Click="ButtonConvertEAC_Click" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
