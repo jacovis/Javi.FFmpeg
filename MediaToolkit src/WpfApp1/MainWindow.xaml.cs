@@ -17,7 +17,7 @@ namespace WpfApp1
     {
         const string ffmpeg = @"D:\Projecten\Tools\ffmpeg\Executable\bin\ffmpeg.exe";
 
-        private MediaFile inputFile = new MediaFile { Filename = @"D:\Projecten\CSharp\MoSe\Sample\Suits.S08E10.720p.WEB.X264-METCON[rarbg]\Suits.S08E10.720p.WEB.X264-METCON.mkv" };
+        //private MediaFile inputFile = new MediaFile { Filename = @"D:\Projecten\CSharp\MoSe\Sample\Suits.S08E10.720p.WEB.X264-METCON[rarbg]\Suits.S08E10.720p.WEB.X264-METCON.mkv" };
 
         // -ss 00:33:47 -t 00:04:58 
         //private MediaFile inputFile = new MediaFile { Filename = @"D:\Downloads\Muziek\_RADIOHEAD\20060617 Bonnaroo\mp4\Radiohead - Live at Bonnaroo Festival 2006 (Full Concert, Remastered, 60fps).mp4" };
@@ -28,7 +28,7 @@ namespace WpfApp1
         //private MediaFile inputFile = new MediaFile { Filename = @"D:\Projecten\CSharp\MoSe\Sample\Kiss Me First S01E02\Kiss Me First S01E02 Make It Stop.mkv" };
 
         // multiple subs
-        //private MediaFile inputFile = new MediaFile { Filename = @"D:\Projecten\CSharp\MoSe\Sample\GLOW S02E10 Every Potato Has A Receipt_cut.mkv" };
+        private MediaFile inputFile = new MediaFile { Filename = @"D:\Projecten\CSharp\MoSe\Sample\GLOW S02E10 Every Potato Has A Receipt_cut.mkv" };
 
 
         CancellationTokenSource CancellationTokenSource;
@@ -38,21 +38,25 @@ namespace WpfApp1
             InitializeComponent();
         }
 
-        private void OutputText(string text)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            if (Application.Current == null) { return; }
-            if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
+            try
             {
-                Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
-                    OutputText(text)));
+                if (this.CancellationTokenSource != null)
+                {
+                    this.CancellationTokenSource.Cancel();
+                }
             }
-            else
+            catch (ObjectDisposedException)
             {
-                this.TextBlockMediaInfo.Text += Environment.NewLine + text;
-                this.TextBlockMediaInfo.ScrollToEnd();
+                // cancel was not possible, tokensource was already disposed
             }
         }
 
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            this.TextBlockMediaInfo.Text = string.Empty;
+        }
         private void GrabThumbnail()
         {
             // Grab thumbnail from a video
@@ -69,7 +73,7 @@ namespace WpfApp1
                 {
                     OutputText(i.ToString());
 
-                    var options = new ConversionOptions { Seek = TimeSpan.FromMilliseconds((32 * 60 + 59) * 1000 + i * 42) }; // 8:26 - 8:46 20sec evry 40ms
+                    var options = new ConversionOptions { Seek = TimeSpan.FromMilliseconds((32 * 60 + 59) * 1000 + i * 42) };
                     int hours = options.Seek.Value.Hours;
                     int minutes = options.Seek.Value.Minutes;
                     int seconds = options.Seek.Value.Seconds;
@@ -106,22 +110,8 @@ namespace WpfApp1
         {
             using (var engine = new Engine(ffmpeg))
             {
-                //engine.FfmpegDataEvent += (s, args) => { OutputText(args.Data); };
-
-
-                // //from https://csharp.hotexamples.com/examples/MediaToolkit/Engine/CustomCommand/php-engine-customcommand-method-examples.html :
-                //////Desperate attempt to catch the extraction from the MediaToolkit lib but it simply does not pass into those events.
-                //////engine.ConvertProgressEvent += (sender, args) => AudioExtractionProgressChanged?.Invoke(this, new ProgressEventArgs((args.ProcessedDuration.TotalMilliseconds / args.TotalDuration.TotalMilliseconds) * 100f));
-                //////engine.ConversionCompleteEvent += (sender, args) => AudioExtractionProgressChanged?.Invoke(this, new ProgressEventArgs((args.ProcessedDuration.TotalMilliseconds / args.TotalDuration.TotalMilliseconds) * 100f));
-                //////informing on 0% and 100%, btw those conversions are pretty fast, 5 to 10 seconds for a 50MB 1048p video.
-                ////await Task.Run(() => engine.CustomCommand($"-i \"{@in.Filename.Replace("\\", "/")}\" -vn -acodec copy \"{@out.Filename.Replace("\\", "/")}\"")); //begin conversion progress. it is executed serially.
-
-                // extract subtitle text using ffmpeg:
-                // ffmpeg -i "show.mkv" -vn -an -map 0:s:0 -c:s:0 srt -y "show.srt"
-                // This would download the first subtitle track. If there are several, use 0:s:1 to download the second one, 0:s:2 to download the third one, and so on.
-
-                engine.ConvertProgressEvent += ConvertProgressEvent;
-                engine.ConversionCompleteEvent += ConversionCompleteEvent;
+                engine.ConvertProgressEvent += HandleProgressEvent;
+                engine.ConversionCompleteEvent += HandleCompleteEvent;
                 engine.FfmpegDataEvent += (s, args) => { OutputText(args.Data); };
 
                 OutputText("start extract srt");
@@ -133,38 +123,17 @@ namespace WpfApp1
             }
         }
 
-        private void ConvertProgressEvent(object sender, ConvertProgressEventArgs e)
-        {
-            OutputText("ConvertProgressEvent");
-
-            OutputText($"    Bitrate: {e.Bitrate}");
-            OutputText($"    Fps: {e.Fps}");
-            OutputText($"    Frame: {e.Frame}");
-            OutputText($"    ProcessedDuration: {e.ProcessedDuration}");
-            OutputText($"    SizeKb: {e.SizeKb}");
-            OutputText($"    Speed: {e.Speed}");
-            OutputText($"    TotalDuration: {e.TotalDuration}");
-        }
-
-        private void ConversionCompleteEvent(object sender, ConversionCompleteEventArgs e)
-        {
-            OutputText("ConversionCompleteEvent");
-
-            OutputText($"    MuxingOverhead: {e.MuxingOverhead}");
-            OutputText($"    TotalDuration: {e.TotalDuration}");
-        }
-
         private async void ButtonCutVideo_Click(object sender, RoutedEventArgs e)
         {
             var outputFile = new MediaFile(Path.Combine(Path.GetDirectoryName(inputFile.Filename), Path.GetFileNameWithoutExtension(inputFile.Filename) + "_Cut" + Path.GetExtension(inputFile.Filename)));
 
             using (var engine = new Engine(ffmpeg))
             {
-                engine.ConvertProgressEvent += CutVideoProgressEvent;
-                engine.ConversionCompleteEvent += CutVideoCompleteEvent;
+                engine.ConvertProgressEvent += HandleProgressEvent;
+                engine.ConversionCompleteEvent += HandleCompleteEvent;
                 engine.FfmpegDataEvent += (s, args) => { OutputText(args.Data); };
 
-                OutputText("start cut video");
+                OutputText("***** start cut video");
 
                 ////// !!let op: parameter duration is veranderd in end in method engine.CutMedia!!!!
 
@@ -186,9 +155,9 @@ namespace WpfApp1
                 //string ffmpegCommand = string.Format($"-ss {TimeSpan.FromSeconds(10 * 60)} -t {TimeSpan.FromSeconds(4 * 60)} -i \"{inputFile.Filename}\" -map 0:v -c copy  -map 0:a -c copy -map 0:s -c copy \"{outputFile.Filename}\"");
                 //await Task.Run(() => engine.CustomCommand(inputFile, ffmpegCommand));
 
-                await Task.Run(() => engine.CutMedia(this.inputFile.Filename, outputFile.Filename, TimeSpan.FromSeconds(24 * 60 + 30), TimeSpan.FromSeconds(41 * 60 + 16)));
+                await Task.Run(() => engine.CutMedia(this.inputFile.Filename, outputFile.Filename, TimeSpan.FromSeconds(10 * 60 + 30), TimeSpan.FromSeconds(12 * 60 + 0)));
 
-                OutputText("ready cut video");
+                OutputText("**** ready cut video");
             }
         }
 
@@ -198,18 +167,18 @@ namespace WpfApp1
 
             using (var engine = new Engine(ffmpeg))
             {
-                engine.ConvertProgressEvent += CutVideoProgressEvent;
-                engine.ConversionCompleteEvent += CutVideoCompleteEvent;
+                engine.ConvertProgressEvent += HandleProgressEvent;
+                engine.ConversionCompleteEvent += HandleCompleteEvent;
                 engine.FfmpegDataEvent += (s, args) => { OutputText(args.Data); };
 
-                OutputText("start convert eac");
+                OutputText("***** start convert eac");
 
                 try
                 {
                     using (this.CancellationTokenSource = new CancellationTokenSource())
                     {
                         var token = this.CancellationTokenSource.Token;
-                        await Task.Run(() => engine.ConvertAudioAC3(token, this.inputFile.Filename, outputFile.Filename, 0, 640000, 48000), token);
+                        await Task.Run(() => engine.ConvertAudioAC3(this.inputFile.Filename, outputFile.Filename, 0, 640000, 48000, token), token);
                     }
                 }
                 catch (OperationCanceledException)
@@ -221,13 +190,13 @@ namespace WpfApp1
                     OutputText(fe.Message + (fe.InnerException == null ? "" : ", " + fe.InnerException.Message));
                 }
 
-                OutputText("ready convert eac");
+                OutputText("***** ready convert eac");
             }
         }
 
-        private void CutVideoProgressEvent(object sender, ConvertProgressEventArgs e)
+        private void HandleProgressEvent(object sender, ConvertProgressEventArgs e)
         {
-            OutputText("ProgressEvent");
+            OutputText("ConvertProgressEvent");
 
             OutputText($"    Bitrate: {e.Bitrate}");
             OutputText($"    Fps: {e.Fps}");
@@ -238,32 +207,29 @@ namespace WpfApp1
             OutputText($"    TotalDuration: {e.TotalDuration}");
         }
 
-        private void CutVideoCompleteEvent(object sender, ConversionCompleteEventArgs e)
+        private void HandleCompleteEvent(object sender, ConversionCompleteEventArgs e)
         {
-            OutputText("CompleteEvent");
+            OutputText("ConversionCompleteEvent");
 
             OutputText($"    MuxingOverhead: {e.MuxingOverhead}");
             OutputText($"    TotalDuration: {e.TotalDuration}");
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
+        private void OutputText(string text)
         {
-            try
+            if (Application.Current == null) { return; }
+            if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
             {
-                if (this.CancellationTokenSource != null)
-                {
-                    this.CancellationTokenSource.Cancel();
-                }
+                Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
+                    OutputText(text)));
             }
-            catch (ObjectDisposedException)
+            else
             {
-                // cancel was not possible, tokensource was already disposed
+                this.TextBlockMediaInfo.Text += Environment.NewLine + text;
+                this.TextBlockMediaInfo.ScrollToEnd();
             }
         }
 
-        private void Clear_Click(object sender, RoutedEventArgs e)
-        {
-            this.TextBlockMediaInfo.Text = string.Empty;
-        }
+
     }
 }
