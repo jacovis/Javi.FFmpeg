@@ -2,6 +2,7 @@
 using MediaToolkit.Events;
 using MediaToolkit.Model;
 using MediaToolkit.Options;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Threading;
@@ -15,27 +16,41 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
-        const string ffmpeg = @"D:\Projecten\Tools\ffmpeg\Executable\bin\ffmpeg.exe";
+        private string FfmpegFileName;
 
-        //private MediaFile inputFile = new MediaFile { Filename = @"D:\Projecten\CSharp\MoSe\Sample\Suits.S08E10.720p.WEB.X264-METCON[rarbg]\Suits.S08E10.720p.WEB.X264-METCON.mkv" };
-
-        // -ss 00:33:47 -t 00:04:58 
-        //private MediaFile inputFile = new MediaFile { Filename = @"D:\Downloads\Muziek\_RADIOHEAD\20060617 Bonnaroo\mp4\Radiohead - Live at Bonnaroo Festival 2006 (Full Concert, Remastered, 60fps).mp4" };
-
-        //private MediaFile inputFile = new MediaFile { Filename = @"C:\Users\Gebruiker\Downloads\NZB\better.call.saul.s04e08.1080p.web.x264-strife.mkv" };
-
-        // 32:59 - 33:59
-        //private MediaFile inputFile = new MediaFile { Filename = @"D:\Projecten\CSharp\MoSe\Sample\Kiss Me First S01E02\Kiss Me First S01E02 Make It Stop.mkv" };
-
-        // multiple subs
-        private MediaFile inputFile = new MediaFile { Filename = @"D:\Projecten\CSharp\MoSe\Sample\GLOW S02E10 Every Potato Has A Receipt_cut.mkv" };
-
+        private MediaFile InputFile;
 
         CancellationTokenSource CancellationTokenSource;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            InputFile = new MediaFile();
+
+            this.FfmpegFileName = SelectFile("*.exe", "Select location of ffmpeg.exe");
+            if (string.IsNullOrWhiteSpace(this.FfmpegFileName))
+            {
+                this.Close();
+            }
+        }
+
+        private string SelectFile(string defaultExt = "", string title = "")
+        {
+            string result = string.Empty;
+
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                DefaultExt = defaultExt,
+                Title = title,
+            };
+
+            if (ofd.ShowDialog() == true)
+            {
+                result = ofd.FileName;
+            }
+
+            return result;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -57,34 +72,39 @@ namespace WpfApp1
         {
             this.TextBlockMediaInfo.Text = string.Empty;
         }
+
         private void GrabThumbnail()
         {
+            this.InputFile.Filename = SelectFile(this.InputFile.Filename);
+            if (string.IsNullOrWhiteSpace(this.InputFile.Filename)) { return; }
+
             // Grab thumbnail from a video
             OutputText("Start grab thumbnail");
-            using (var engine = new Engine(ffmpeg))
+            using (var engine = new Engine(FfmpegFileName))
             {
-                engine.ConversionCompleteEvent += (sender, e) => { OutputText(string.Format($"complete event: {e.MuxingOverhead} {e.TotalDuration}")); };
-                engine.FfmpegDataEvent += (sender, e) => { OutputText(e.Data); };
+                engine.OnCompleted += (sender, e) => { OutputText(string.Format($"complete event: {e.MuxingOverhead} {e.TotalDuration}")); };
+                //engine.OnData += (sender, e) => { OutputText(e.Data); };
 
-                // Save the frames 
-                // typical value for framerate (24000/1001)=23.976 fps == 42 ms
-                // ie grab images for 60 seconds = 60000 ms every 42 ms: loop getthumbnail 60000 / 42 times = 1429
-                for (int i = 0; i < (60 * 1000 / 42); i++)
+                // Save thumbnails
+                // For this sample thumbnails from 0:00:59 to 0:01:09 are grabbed every 42ms
+                // typical value for framerate (24000/1001)=23.976 fps === 42 ms
+                // ie grab images for 2 seconds = 2000 ms every 42 ms: loop getthumbnail 2000 / 42 times = 47
+                for (int i = 0; i < (2 * 1000 / 42); i++)
                 {
                     OutputText(i.ToString());
 
-                    var options = new ConversionOptions { Seek = TimeSpan.FromMilliseconds((32 * 60 + 59) * 1000 + i * 42) };
+                    var options = new ConversionOptions { Seek = TimeSpan.FromMilliseconds((0 * 60 + 59) * 1000 + i * 42) };
                     int hours = options.Seek.Value.Hours;
                     int minutes = options.Seek.Value.Minutes;
                     int seconds = options.Seek.Value.Seconds;
                     int milliseconds = options.Seek.Value.Milliseconds;
-                    string timeString = (hours == 0 ? "" : hours.ToString("D2") + ".") + minutes.ToString("D2") + "." + seconds.ToString("D2") + "." + milliseconds.ToString("D3");
+                    string timeString = hours.ToString("D2") + "." + minutes.ToString("D2") + "." + seconds.ToString("D2") + "." + milliseconds.ToString("D3");
                     var outputFile = new MediaFile
                     {
-                        Filename = Path.Combine(Path.GetDirectoryName(inputFile.Filename),
-                        Path.GetFileNameWithoutExtension(inputFile.Filename) + " " + timeString + ".jpg")
+                        Filename = Path.Combine(Path.GetDirectoryName(InputFile.Filename),
+                            Path.GetFileNameWithoutExtension(InputFile.Filename) + " " + timeString + ".jpg")
                     };
-                    engine.GetThumbnail(inputFile, outputFile, options);
+                    engine.GetThumbnail(InputFile, outputFile, options);
                 }
             }
             OutputText("End grab thumbnail");
@@ -95,27 +115,19 @@ namespace WpfApp1
             await Task.Run(() => GrabThumbnail());
         }
 
-        private void ButtonRetrieveMetaData_Click(object sender, RoutedEventArgs e)
-        {
-            using (var engine = new Engine(ffmpeg))
-            {
-                engine.FfmpegDataEvent += (s, args) => { OutputText(args.Data); };
-                engine.GetMetadata(inputFile);
-            }
-
-            OutputText(inputFile.Metadata.Duration.ToString());
-        }
-
         private async void ButtonExtractSrt_Click(object sender, RoutedEventArgs e)
         {
-            using (var engine = new Engine(ffmpeg))
+            this.InputFile.Filename = SelectFile(this.InputFile.Filename);
+            if (string.IsNullOrWhiteSpace(this.InputFile.Filename)) { return; }
+
+            using (var engine = new Engine(FfmpegFileName))
             {
-                engine.ConvertProgressEvent += HandleProgressEvent;
-                engine.ConversionCompleteEvent += HandleCompleteEvent;
-                engine.FfmpegDataEvent += (s, args) => { OutputText(args.Data); };
+                engine.OnProgress += HandleProgressEvent;
+                engine.OnCompleted += HandleCompleteEvent;
+                engine.OnData += (s, args) => { OutputText(args.Data); };
 
                 OutputText("start extract srt");
-                await Task.Run(() => engine.ExtractSubtitle(this.inputFile.Filename, Path.ChangeExtension(inputFile.Filename, "srt"), 0));
+                await Task.Run(() => engine.ExtractSubtitle(this.InputFile.Filename, Path.ChangeExtension(InputFile.Filename, "srt"), 0));
                 OutputText("ready extract srt");
                 OutputText(Environment.NewLine);
                 OutputText(Environment.NewLine);
@@ -125,37 +137,20 @@ namespace WpfApp1
 
         private async void ButtonCutVideo_Click(object sender, RoutedEventArgs e)
         {
-            var outputFile = new MediaFile(Path.Combine(Path.GetDirectoryName(inputFile.Filename), Path.GetFileNameWithoutExtension(inputFile.Filename) + "_Cut" + Path.GetExtension(inputFile.Filename)));
+            this.InputFile.Filename = SelectFile(this.InputFile.Filename);
+            if (string.IsNullOrWhiteSpace(this.InputFile.Filename)) { return; }
 
-            using (var engine = new Engine(ffmpeg))
+            var outputFile = new MediaFile(Path.Combine(Path.GetDirectoryName(InputFile.Filename), Path.GetFileNameWithoutExtension(InputFile.Filename) + "_Cut" + Path.GetExtension(InputFile.Filename)));
+
+            using (var engine = new Engine(FfmpegFileName))
             {
-                engine.ConvertProgressEvent += HandleProgressEvent;
-                engine.ConversionCompleteEvent += HandleCompleteEvent;
-                engine.FfmpegDataEvent += (s, args) => { OutputText(args.Data); };
+                engine.OnProgress += HandleProgressEvent;
+                engine.OnCompleted += HandleCompleteEvent;
+                engine.OnData += (s, args) => { OutputText(args.Data); };
 
                 OutputText("***** start cut video");
 
-                ////// !!let op: parameter duration is veranderd in end in method engine.CutMedia!!!!
-
-                //// This example will create a 60 second video, starting from the 9:59
-                //var options = new ConversionOptions();
-                //// First parameter requests the starting frame to cut the media from.
-                //// Second parameter requests how long to cut the video.
-                //// LET OP!!! : dit doet een re-encode van video, audio en subtitle streams.... beter om custom command te doen
-                //options.CutMedia(TimeSpan.FromSeconds(9 * 60 + 59), TimeSpan.FromSeconds(60));
-                //await Task.Run(() => engine.Convert(inputFile, outputFile, options));
-
-                //-ss 00:33:47 -t 00:04:58 -i "D:\Downloads\Muziek\_RADIOHEAD\20060617 Bonnaroo\mp4\Radiohead - Live at Bonnaroo Festival 2006 (Full Concert, Remastered, 60fps).mp4" -acodec copy -vcodec copy -scodec copy out.mp4
-                //string ffmpegCommand = string.Format($"-ss {TimeSpan.FromSeconds(33 * 60 + 47)} -t {TimeSpan.FromSeconds(4 * 60 + 58)} -i \"{inputFile.Filename}\" -acodec copy -vcodec copy -scodec copy \"{outputFile.Filename}\"");
-                //await Task.Run(() => engine.CustomCommand(inputFile, ffmpegCommand));
-
-                // -map 0:v -c copy
-                // voor copy alle video streams naar output; idem voor audio en subtitles
-                // hiermee worden alle streams copied naar output terwijl er een stuk uit het origineel wordt geknipt.
-                //string ffmpegCommand = string.Format($"-ss {TimeSpan.FromSeconds(10 * 60)} -t {TimeSpan.FromSeconds(4 * 60)} -i \"{inputFile.Filename}\" -map 0:v -c copy  -map 0:a -c copy -map 0:s -c copy \"{outputFile.Filename}\"");
-                //await Task.Run(() => engine.CustomCommand(inputFile, ffmpegCommand));
-
-                await Task.Run(() => engine.CutMedia(this.inputFile.Filename, outputFile.Filename, TimeSpan.FromSeconds(10 * 60 + 30), TimeSpan.FromSeconds(12 * 60 + 0)));
+                await Task.Run(() => engine.CutMedia(this.InputFile.Filename, outputFile.Filename, TimeSpan.FromSeconds(32 * 60 + 59), TimeSpan.FromSeconds(34 * 60 + 0)));
 
                 OutputText("**** ready cut video");
             }
@@ -163,13 +158,16 @@ namespace WpfApp1
 
         private async void ButtonConvertEAC_Click(object sender, RoutedEventArgs e)
         {
-            var outputFile = new MediaFile(Path.Combine(Path.GetDirectoryName(inputFile.Filename), Path.GetFileNameWithoutExtension(inputFile.Filename) + "_ConvertAC3" + Path.GetExtension(inputFile.Filename)));
+            this.InputFile.Filename = SelectFile(this.InputFile.Filename);
+            if (string.IsNullOrWhiteSpace(this.InputFile.Filename)) { return; }
 
-            using (var engine = new Engine(ffmpeg))
+            var outputFile = new MediaFile(Path.Combine(Path.GetDirectoryName(InputFile.Filename), Path.GetFileNameWithoutExtension(InputFile.Filename) + "_ConvertAC3" + Path.GetExtension(InputFile.Filename)));
+
+            using (var engine = new Engine(FfmpegFileName))
             {
-                engine.ConvertProgressEvent += HandleProgressEvent;
-                engine.ConversionCompleteEvent += HandleCompleteEvent;
-                engine.FfmpegDataEvent += (s, args) => { OutputText(args.Data); };
+                engine.OnProgress += HandleProgressEvent;
+                engine.OnCompleted += HandleCompleteEvent;
+                engine.OnData += (s, args) => { OutputText(args.Data); };
 
                 OutputText("***** start convert eac");
 
@@ -178,7 +176,7 @@ namespace WpfApp1
                     using (this.CancellationTokenSource = new CancellationTokenSource())
                     {
                         var token = this.CancellationTokenSource.Token;
-                        await Task.Run(() => engine.ConvertAudioAC3(this.inputFile.Filename, outputFile.Filename, 0, 640000, 48000, token), token);
+                        await Task.Run(() => engine.ConvertAudioAC3(this.InputFile.Filename, outputFile.Filename, 0, 640000, 48000, token), token);
                     }
                 }
                 catch (OperationCanceledException)
@@ -194,7 +192,7 @@ namespace WpfApp1
             }
         }
 
-        private void HandleProgressEvent(object sender, ConvertProgressEventArgs e)
+        private void HandleProgressEvent(object sender, ProgressEventArgs e)
         {
             OutputText("ConvertProgressEvent");
 
@@ -207,7 +205,7 @@ namespace WpfApp1
             OutputText($"    TotalDuration: {e.TotalDuration}");
         }
 
-        private void HandleCompleteEvent(object sender, ConversionCompleteEventArgs e)
+        private void HandleCompleteEvent(object sender, CompletedEventArgs e)
         {
             OutputText("ConversionCompleteEvent");
 
@@ -220,7 +218,7 @@ namespace WpfApp1
             if (Application.Current == null) { return; }
             if (Application.Current.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
             {
-                Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
+                Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
                     OutputText(text)));
             }
             else

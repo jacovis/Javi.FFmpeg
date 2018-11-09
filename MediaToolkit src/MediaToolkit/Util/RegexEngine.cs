@@ -38,10 +38,10 @@ namespace MediaToolkit.Util
         /// </summary>
         /// <param name="data">Event data from the FFmpeg console.</param>
         /// <param name="progressEventArgs">
-        ///     <para>If successful, outputs a <see cref="ConvertProgressEventArgs"/> which is </para>
+        ///     <para>If successful, outputs a <see cref="ProgressEventArgs"/> which is </para>
         ///     <para>generated from the data. </para>
         /// </param>
-        internal static bool IsProgressData(string data, out ConvertProgressEventArgs progressEventArgs)
+        internal static bool IsProgressData(string data, out ProgressEventArgs progressEventArgs)
         {
             progressEventArgs = null;
 
@@ -63,7 +63,7 @@ namespace MediaToolkit.Util
             double? bitrate = GetDoubleValue(matchBitrate);
             double? speed = GetDoubleValue(matchSpeed);
 
-            progressEventArgs = new ConvertProgressEventArgs(processedDuration, TimeSpan.Zero, frame, fps, sizeKb, bitrate, speed);
+            progressEventArgs = new ProgressEventArgs(processedDuration, TimeSpan.Zero, frame, fps, sizeKb, bitrate, speed);
 
             return true;
         }
@@ -111,10 +111,10 @@ namespace MediaToolkit.Util
         /// </summary>
         /// <param name="data">Event data from the FFmpeg console.</param>
         /// <param name="conversionCompleteEvent">
-        ///     <para>If successful, outputs a <see cref="ConversionCompleteEventArgs"/> which is </para>
+        ///     <para>If successful, outputs a <see cref="CompletedEventArgs"/> which is </para>
         ///     <para>generated from the data. </para>
         /// </param>
-        internal static bool IsConvertCompleteData(string data, out ConversionCompleteEventArgs conversionCompleteEvent)
+        internal static bool IsConvertCompleteData(string data, out CompletedEventArgs conversionCompleteEvent)
         {
             conversionCompleteEvent = null;
 
@@ -124,7 +124,7 @@ namespace MediaToolkit.Util
 
             Double.TryParse(matchFinished.Groups[2].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double muxingOverhead);
 
-            conversionCompleteEvent = new ConversionCompleteEventArgs(TimeSpan.Zero, muxingOverhead);
+            conversionCompleteEvent = new CompletedEventArgs(TimeSpan.Zero, muxingOverhead);
 
             return true;
         }

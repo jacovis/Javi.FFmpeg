@@ -3,7 +3,7 @@ using System;
 
 namespace MediaToolkit
 {
-    public class ConversionCompleteEventArgs : EventArgs
+    public class CompletedEventArgs : EventArgs
     {
         /// <summary>
         /// Raises notification once conversion is complete
@@ -12,7 +12,7 @@ namespace MediaToolkit
         /// <param name="OutputFile">The output file.</param>
         /// <param name="totalDuration">The total duration of the original media</param>
         /// <param name="muxingOverhead">The muxing overhead.</param>
-        public ConversionCompleteEventArgs(TimeSpan totalDuration, double muxingOverhead)
+        public CompletedEventArgs(TimeSpan totalDuration, double muxingOverhead)
         {
             TotalDuration = totalDuration;
             MuxingOverhead = muxingOverhead;

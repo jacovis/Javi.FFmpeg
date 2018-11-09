@@ -31,29 +31,45 @@ namespace MediaToolkit
         /// -y                      Overwrite output files without asking.
         /// -loglevel info          Set logging level
         /// </summary>
-        public readonly string standardArguments = "-nostdin -y -loglevel info ";
+        private readonly string standardArguments = "-nostdin -y -loglevel info ";
 
         /// <summary>
         /// Event fired for progress in ffmpeg process.
         /// </summary>
-        public event EventHandler<ConvertProgressEventArgs> ConvertProgressEvent;
+        public event EventHandler<ProgressEventArgs> OnProgress;
 
         /// <summary>
         /// Event fired when ffmpeg is done processing.
         /// </summary>
-        public event EventHandler<ConversionCompleteEventArgs> ConversionCompleteEvent;
+        public event EventHandler<CompletedEventArgs> OnCompleted;
 
         /// <summary>
         /// Event for every line of output from ffmpeg when processing.
         /// </summary>
-        public event EventHandler<FfmpegDataEventArgs> FfmpegDataEvent;
+        public event EventHandler<FfmpegDataEventArgs> OnData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Engine" /> class.
         /// </summary>
         /// <param name="ffMpegPath"></param>
-        /// -------------------------------------------------------------------------------------------------
         public Engine(string ffMpegPath) : base(ffMpegPath) { }
+
+        /// <summary>
+        ///  Converts media with default options.
+        /// </summary>
+        /// <param name="inputFile">    Input file. </param>
+        /// <param name="outputFile">   Output file. </param>
+        public void Convert(MediaFile inputFile, MediaFile outputFile, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            EngineParameters engineParams = new EngineParameters
+            {
+                InputFile = inputFile,
+                OutputFile = outputFile,
+                Task = FFmpegTask.Convert
+            };
+
+            this.FFmpegEngine(engineParams, cancellationToken);
+        }
 
         /// <summary>
         /// Converts media with conversion options.
@@ -69,24 +85,6 @@ namespace MediaToolkit
                 InputFile = inputFile,
                 OutputFile = outputFile,
                 ConversionOptions = options,
-                Task = FFmpegTask.Convert
-            };
-
-            this.FFmpegEngine(engineParams, cancellationToken);
-        }
-
-        /// -------------------------------------------------------------------------------------------------
-        /// <summary>
-        ///  Converts media with default options.
-        /// </summary>
-        /// <param name="inputFile">    Input file. </param>
-        /// <param name="outputFile">   Output file. </param>
-        public void Convert(MediaFile inputFile, MediaFile outputFile, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            EngineParameters engineParams = new EngineParameters
-            {
-                InputFile = inputFile,
-                OutputFile = outputFile,
                 Task = FFmpegTask.Convert
             };
 
@@ -120,22 +118,6 @@ namespace MediaToolkit
             }
 
             this.StartFFmpegProcess(engineParameters, cancellationToken);
-        }
-
-        /// -------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Retrieve media metadata.
-        /// </summary>
-        /// <param name="inputFile">Retrieves the metadata for the input file.</param>
-        public void GetMetadata(MediaFile inputFile, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            EngineParameters engineParams = new EngineParameters
-            {
-                InputFile = inputFile,
-                Task = FFmpegTask.GetMetaData
-            };
-
-            this.FFmpegEngine(engineParams, cancellationToken);
         }
 
         /// <summary>   
@@ -265,7 +247,8 @@ namespace MediaToolkit
                     try
                     {
                         receivedMessagesLog.Insert(0, received.Data);
-                        this.FfmpegDataEvent?.Invoke(this, new FfmpegDataEventArgs(received.Data));
+
+                        this.OnData?.Invoke(this, new FfmpegDataEventArgs(received.Data));
 
                         if (engineParameters.InputFile != null)
                         {
@@ -285,19 +268,19 @@ namespace MediaToolkit
                             }
                         }
 
-                        if (RegexEngine.IsProgressData(received.Data, out ConvertProgressEventArgs progressEvent))
+                        if (RegexEngine.IsProgressData(received.Data, out ProgressEventArgs progressEvent))
                         {
                             progressEvent.InputFile = engineParameters.InputFile;
                             progressEvent.OutputFile = engineParameters.OutputFile;
                             progressEvent.TotalDuration = totalMediaDuration;
-                            this.ConvertProgressEvent?.Invoke(this, progressEvent);
+                            this.OnProgress?.Invoke(this, progressEvent);
                         }
-                        else if (RegexEngine.IsConvertCompleteData(received.Data, out ConversionCompleteEventArgs convertCompleteEvent))
+                        else if (RegexEngine.IsConvertCompleteData(received.Data, out CompletedEventArgs convertCompleteEvent))
                         {
                             convertCompleteEvent.InputFile = engineParameters.InputFile;
                             convertCompleteEvent.OutputFile = engineParameters.OutputFile;
                             convertCompleteEvent.TotalDuration = totalMediaDuration;
-                            this.ConversionCompleteEvent?.Invoke(this, convertCompleteEvent);
+                            this.OnCompleted?.Invoke(this, convertCompleteEvent);
                         }
                     }
                     catch (Exception ex)

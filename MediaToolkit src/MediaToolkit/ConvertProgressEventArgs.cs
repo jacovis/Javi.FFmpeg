@@ -3,7 +3,7 @@ using System;
 
 namespace MediaToolkit
 {
-    public class ConvertProgressEventArgs : EventArgs
+    public class ProgressEventArgs : EventArgs
     {
         /// <summary>
         /// Raises notifications on the conversion process
@@ -15,7 +15,7 @@ namespace MediaToolkit
         /// <param name="sizeKb">The current size in Kb of the converted media</param>
         /// <param name="bitrate">The bit rate of the converted media</param>
         /// <param name="speed">The speed.</param>
-        public ConvertProgressEventArgs(TimeSpan processed, TimeSpan totalDuration, long? frame, double? fps, int? sizeKb, double? bitrate, double? speed)
+        public ProgressEventArgs(TimeSpan processed, TimeSpan totalDuration, long? frame, double? fps, int? sizeKb, double? bitrate, double? speed)
         {
             TotalDuration = totalDuration;
             ProcessedDuration = processed;
