@@ -2,7 +2,7 @@
 
 namespace MediaToolkit.Model
 {
-    public class Metadata
+    /*public class Metadata
     {
         internal Metadata() { }
         public TimeSpan Duration { get; internal set; }
@@ -28,5 +28,5 @@ namespace MediaToolkit.Model
             public string ChannelOutput { get; internal set; }
             public int BitRateKbs { get; internal set; }
         }
-    }
+    }*/
 }

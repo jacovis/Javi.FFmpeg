@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MediaToolkit.Model;
 using System.Globalization;
+using MediaToolkit.Events;
 
 namespace MediaToolkit.Util
 {
@@ -129,7 +130,7 @@ namespace MediaToolkit.Util
             return true;
         }
 
-        internal static void TestVideo(string data, EngineParameters engine)
+        /*internal static void TestVideo(string data, EngineParameters engine)
         {
             Match matchMetaVideo = Index[Find.MetaVideo].Match(data);
 
@@ -180,7 +181,7 @@ namespace MediaToolkit.Util
                     ChannelOutput = matchAudioFormatHzChannel[3].ToString(),
                     BitRateKbs = !(string.IsNullOrWhiteSpace(matchAudioBitRate[1].ToString())) ? Convert.ToInt32(matchAudioBitRate[1].ToString()) : 0
                 };
-        }
+        }*/
 
         internal enum Find
         {

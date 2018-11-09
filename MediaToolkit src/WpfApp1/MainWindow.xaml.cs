@@ -1,6 +1,6 @@
 ﻿using MediaToolkit;
 using MediaToolkit.Events;
-using MediaToolkit.Model;
+using MediaToolkit.Exceptions;
 using MediaToolkit.Options;
 using Microsoft.Win32;
 using System;
@@ -16,9 +16,9 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string FfmpegFileName;
+        private string FfmpegFileName = @"D:\Projecten\Tools\ffmpeg\Executable\bin\ffmpeg.exe";
 
-        private MediaFile InputFile;
+        private string InputFile;
 
         CancellationTokenSource CancellationTokenSource;
 
@@ -26,13 +26,11 @@ namespace WpfApp1
         {
             InitializeComponent();
 
-            InputFile = new MediaFile();
-
-            this.FfmpegFileName = SelectFile("*.exe", "Select location of ffmpeg.exe");
-            if (string.IsNullOrWhiteSpace(this.FfmpegFileName))
-            {
-                this.Close();
-            }
+            //this.FfmpegFileName = SelectFile("*.exe", "Select location of ffmpeg.exe");
+            //if (string.IsNullOrWhiteSpace(this.FfmpegFileName))
+            //{
+            //    this.Close();
+            //}
         }
 
         private string SelectFile(string defaultExt = "", string title = "")
@@ -75,11 +73,11 @@ namespace WpfApp1
 
         private void GrabThumbnail()
         {
-            this.InputFile.Filename = SelectFile(this.InputFile.Filename);
-            if (string.IsNullOrWhiteSpace(this.InputFile.Filename)) { return; }
+            this.InputFile = SelectFile(this.InputFile);
+            if (string.IsNullOrWhiteSpace(this.InputFile)) { return; }
 
-            // Grab thumbnail from a video
-            OutputText("Start grab thumbnail");
+            // Grab thumbnails from a video
+            OutputText("***Start grab thumbnail");
             using (var engine = new Engine(FfmpegFileName))
             {
                 engine.OnCompleted += (sender, e) => { OutputText(string.Format($"complete event: {e.MuxingOverhead} {e.TotalDuration}")); };
@@ -99,15 +97,11 @@ namespace WpfApp1
                     int seconds = options.Seek.Value.Seconds;
                     int milliseconds = options.Seek.Value.Milliseconds;
                     string timeString = hours.ToString("D2") + "." + minutes.ToString("D2") + "." + seconds.ToString("D2") + "." + milliseconds.ToString("D3");
-                    var outputFile = new MediaFile
-                    {
-                        Filename = Path.Combine(Path.GetDirectoryName(InputFile.Filename),
-                            Path.GetFileNameWithoutExtension(InputFile.Filename) + " " + timeString + ".jpg")
-                    };
+                    string outputFile = Path.Combine(Path.GetDirectoryName(InputFile), Path.GetFileNameWithoutExtension(InputFile) + " " + timeString + ".jpg");
                     engine.GetThumbnail(InputFile, outputFile, options);
                 }
             }
-            OutputText("End grab thumbnail");
+            OutputText("***End grab thumbnail");
         }
 
         private async void ButtonGrabThumbnail_Click(object sender, RoutedEventArgs e)
@@ -117,8 +111,8 @@ namespace WpfApp1
 
         private async void ButtonExtractSrt_Click(object sender, RoutedEventArgs e)
         {
-            this.InputFile.Filename = SelectFile(this.InputFile.Filename);
-            if (string.IsNullOrWhiteSpace(this.InputFile.Filename)) { return; }
+            this.InputFile = SelectFile(this.InputFile);
+            if (string.IsNullOrWhiteSpace(this.InputFile)) { return; }
 
             using (var engine = new Engine(FfmpegFileName))
             {
@@ -126,21 +120,21 @@ namespace WpfApp1
                 engine.OnCompleted += HandleCompleteEvent;
                 engine.OnData += (s, args) => { OutputText(args.Data); };
 
-                OutputText("start extract srt");
-                await Task.Run(() => engine.ExtractSubtitle(this.InputFile.Filename, Path.ChangeExtension(InputFile.Filename, "srt"), 0));
-                OutputText("ready extract srt");
-                OutputText(Environment.NewLine);
-                OutputText(Environment.NewLine);
+                OutputText("***Start extract srt");
+
+                await Task.Run(() => engine.ExtractSubtitle(this.InputFile, Path.ChangeExtension(InputFile, "srt"), 0));
+
+                OutputText("***Ready extract srt");
 
             }
         }
 
         private async void ButtonCutVideo_Click(object sender, RoutedEventArgs e)
         {
-            this.InputFile.Filename = SelectFile(this.InputFile.Filename);
-            if (string.IsNullOrWhiteSpace(this.InputFile.Filename)) { return; }
+            this.InputFile = SelectFile(this.InputFile);
+            if (string.IsNullOrWhiteSpace(this.InputFile)) { return; }
 
-            var outputFile = new MediaFile(Path.Combine(Path.GetDirectoryName(InputFile.Filename), Path.GetFileNameWithoutExtension(InputFile.Filename) + "_Cut" + Path.GetExtension(InputFile.Filename)));
+            string outputFile = Path.Combine(Path.GetDirectoryName(InputFile), Path.GetFileNameWithoutExtension(InputFile) + "_Cut" + Path.GetExtension(InputFile));
 
             using (var engine = new Engine(FfmpegFileName))
             {
@@ -148,20 +142,20 @@ namespace WpfApp1
                 engine.OnCompleted += HandleCompleteEvent;
                 engine.OnData += (s, args) => { OutputText(args.Data); };
 
-                OutputText("***** start cut video");
+                OutputText("***Start cut video");
 
-                await Task.Run(() => engine.CutMedia(this.InputFile.Filename, outputFile.Filename, TimeSpan.FromSeconds(32 * 60 + 59), TimeSpan.FromSeconds(34 * 60 + 0)));
+                await Task.Run(() => engine.CutMedia(this.InputFile, outputFile, TimeSpan.FromSeconds(32 * 60 + 59), TimeSpan.FromSeconds(34 * 60 + 0)));
 
-                OutputText("**** ready cut video");
+                OutputText("***Ready cut video");
             }
         }
 
         private async void ButtonConvertEAC_Click(object sender, RoutedEventArgs e)
         {
-            this.InputFile.Filename = SelectFile(this.InputFile.Filename);
-            if (string.IsNullOrWhiteSpace(this.InputFile.Filename)) { return; }
+            this.InputFile = SelectFile(this.InputFile);
+            if (string.IsNullOrWhiteSpace(this.InputFile)) { return; }
 
-            var outputFile = new MediaFile(Path.Combine(Path.GetDirectoryName(InputFile.Filename), Path.GetFileNameWithoutExtension(InputFile.Filename) + "_ConvertAC3" + Path.GetExtension(InputFile.Filename)));
+            var outputFile = Path.Combine(Path.GetDirectoryName(InputFile), Path.GetFileNameWithoutExtension(InputFile) + "_ConvertAC3" + Path.GetExtension(InputFile));
 
             using (var engine = new Engine(FfmpegFileName))
             {
@@ -169,26 +163,26 @@ namespace WpfApp1
                 engine.OnCompleted += HandleCompleteEvent;
                 engine.OnData += (s, args) => { OutputText(args.Data); };
 
-                OutputText("***** start convert eac");
+                OutputText("***Start convert eac");
 
                 try
                 {
                     using (this.CancellationTokenSource = new CancellationTokenSource())
                     {
                         var token = this.CancellationTokenSource.Token;
-                        await Task.Run(() => engine.ConvertAudioAC3(this.InputFile.Filename, outputFile.Filename, 0, 640000, 48000, token), token);
+                        await Task.Run(() => engine.ConvertAudioAC3(this.InputFile, outputFile, 0, 640000, 48000, token), token);
                     }
                 }
                 catch (OperationCanceledException)
                 {
-                    OutputText("***** operation cancelled *****");
+                    OutputText("***Operation cancelled *****");
                 }
                 catch (FFMpegException fe)
                 {
                     OutputText(fe.Message + (fe.InnerException == null ? "" : ", " + fe.InnerException.Message));
                 }
 
-                OutputText("***** ready convert eac");
+                OutputText("***Ready convert eac");
             }
         }
 

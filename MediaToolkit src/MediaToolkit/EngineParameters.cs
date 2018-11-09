@@ -26,12 +26,12 @@ namespace MediaToolkit
         /// -------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the input file. </summary>
         /// <value> The input file. </value>
-        internal MediaFile InputFile { get; set; }
+        internal string InputFile { get; set; }
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the output file. </summary>
         /// <value> The output file. </value>
-        internal MediaFile OutputFile { get; set; }
+        internal string OutputFile { get; set; }
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the task. </summary>

@@ -1,6 +1,6 @@
 ﻿namespace MediaToolkit.Model
 {
-    public class MediaFile
+    /*public class MediaFile
     {
         public MediaFile(){}
 
@@ -13,6 +13,6 @@
 
         public Metadata Metadata { get; internal set; }
         
-    }
+    }*/
 
 }

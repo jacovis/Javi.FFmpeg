@@ -12,6 +12,7 @@
 namespace MediaToolkit
 {
     using MediaToolkit.Events;
+    using MediaToolkit.Exceptions;
     using MediaToolkit.Model;
     using MediaToolkit.Options;
     using MediaToolkit.Util;
@@ -55,43 +56,6 @@ namespace MediaToolkit
         public Engine(string ffMpegPath) : base(ffMpegPath) { }
 
         /// <summary>
-        ///  Converts media with default options.
-        /// </summary>
-        /// <param name="inputFile">    Input file. </param>
-        /// <param name="outputFile">   Output file. </param>
-        public void Convert(MediaFile inputFile, MediaFile outputFile, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            EngineParameters engineParams = new EngineParameters
-            {
-                InputFile = inputFile,
-                OutputFile = outputFile,
-                Task = FFmpegTask.Convert
-            };
-
-            this.FFmpegEngine(engineParams, cancellationToken);
-        }
-
-        /// <summary>
-        /// Converts media with conversion options.
-        /// </summary>
-        /// <param name="inputFile">Input file.</param>
-        /// <param name="outputFile">Output file.</param>
-        /// <param name="options">Conversion options.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        public void Convert(MediaFile inputFile, MediaFile outputFile, ConversionOptions options, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            EngineParameters engineParams = new EngineParameters
-            {
-                InputFile = inputFile,
-                OutputFile = outputFile,
-                ConversionOptions = options,
-                Task = FFmpegTask.Convert
-            };
-
-            this.FFmpegEngine(engineParams, cancellationToken);
-        }
-
-        /// <summary>
         /// Call ffmpeg using a custom command.
         /// inputFile parameter is used to force progress and complete events to fire.
         /// The ffmpegCommand must be a command line ffmpeg can process, including the input file, output file and parameters.
@@ -99,7 +63,7 @@ namespace MediaToolkit
         /// <param name="inputFile">The input file.</param>
         /// <param name="ffmpegCommand">The ffmpeg command.</param>
         /// <exception cref="ArgumentNullException">ffmpegCommand</exception>
-        public void CustomCommand(MediaFile inputFile, string ffmpegCommand, CancellationToken cancellationToken = default(CancellationToken))
+        public void CustomCommand(string inputFile, string ffmpegCommand, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrWhiteSpace(ffmpegCommand))
             {
@@ -112,9 +76,9 @@ namespace MediaToolkit
                 CustomArguments = ffmpegCommand
             };
 
-            if (!engineParameters.InputFile.Filename.StartsWith("http://") && !File.Exists(engineParameters.InputFile.Filename))
+            if (!engineParameters.InputFile.StartsWith("http://") && !File.Exists(engineParameters.InputFile))
             {
-                throw new FileNotFoundException("Input file not found", engineParameters.InputFile.Filename);
+                throw new FileNotFoundException("Input file not found", engineParameters.InputFile);
             }
 
             this.StartFFmpegProcess(engineParameters, cancellationToken);
@@ -126,7 +90,7 @@ namespace MediaToolkit
         /// <param name="inputFile">    Video file. </param>
         /// <param name="outputFile">   Image file. </param>
         /// <param name="options">      Conversion options. </param>
-        public void GetThumbnail(MediaFile inputFile, MediaFile outputFile, ConversionOptions options, CancellationToken cancellationToken = default(CancellationToken))
+        public void GetThumbnail(string inputFile, string outputFile, ConversionOptions options, CancellationToken cancellationToken = default(CancellationToken))
         {
             EngineParameters engineParams = new EngineParameters
             {
@@ -148,9 +112,8 @@ namespace MediaToolkit
         public void ExtractSubtitle(string inputFile, string outputFile, int subtitleTrack = 0, CancellationToken cancellationToken = default(CancellationToken))
         {
 
-            MediaFile input = new MediaFile(inputFile);
-            string ffmpegCommand = string.Format($"-i \"{input.Filename}\" -vn -an -map 0:s:{subtitleTrack} -c:s:0 srt \"{outputFile}\"");
-            this.CustomCommand(input, ffmpegCommand, cancellationToken);
+            string ffmpegCommand = string.Format($"-i \"{inputFile}\" -vn -an -map 0:s:{subtitleTrack} -c:s:0 srt \"{outputFile}\"");
+            this.CustomCommand(inputFile, ffmpegCommand, cancellationToken);
         }
 
         /// <summary>
@@ -162,9 +125,8 @@ namespace MediaToolkit
         /// <param name="end">The endtime.</param>
         public void CutMedia(string inputFile, string outputFile, TimeSpan start, TimeSpan end, CancellationToken cancellationToken = default(CancellationToken))
         {
-            MediaFile input = new MediaFile(inputFile);
-            string ffmpegCommand = string.Format($"-ss {start} -to {end} -i \"{input.Filename}\" -map 0:v? -c copy  -map 0:a? -c copy -map 0:s? -c copy \"{outputFile}\"");
-            this.CustomCommand(input, ffmpegCommand, cancellationToken);
+            string ffmpegCommand = string.Format($"-ss {start} -to {end} -i \"{inputFile}\" -map 0:v? -c copy  -map 0:a? -c copy -map 0:s? -c copy \"{outputFile}\"");
+            this.CustomCommand(inputFile, ffmpegCommand, cancellationToken);
         }
 
         /// <summary>
@@ -175,18 +137,17 @@ namespace MediaToolkit
         /// <param name="audioTrack">The audio track.</param>
         public void ConvertAudioAC3(string inputFile, string outputFile, int audioTrack, int bitRate, int samplingRate, CancellationToken cancellationToken = default(CancellationToken))
         {
-            MediaFile input = new MediaFile(inputFile);
             string ffmpegCommand = standardArguments + string.Format($" -hwaccel auto -i \"{inputFile}\" -map {audioTrack} -c:s copy -c:v copy -c:a ac3 -b:a {bitRate}k  -ar {samplingRate} \"{outputFile}\"");
-            this.CustomCommand(input, ffmpegCommand, cancellationToken);
+            this.CustomCommand(inputFile, ffmpegCommand, cancellationToken);
         }
 
         #region Private method - Helpers
 
         private void FFmpegEngine(EngineParameters engineParameters, CancellationToken cancellationToken)
         {
-            if (!engineParameters.InputFile.Filename.StartsWith("http://") && !File.Exists(engineParameters.InputFile.Filename))
+            if (!engineParameters.InputFile.StartsWith("http://") && !File.Exists(engineParameters.InputFile))
             {
-                throw new FileNotFoundException("Input file not found", engineParameters.InputFile.Filename);
+                throw new FileNotFoundException("Input file not found", engineParameters.InputFile);
             }
 
             this.StartFFmpegProcess(engineParameters, cancellationToken);
@@ -252,19 +213,13 @@ namespace MediaToolkit
 
                         if (engineParameters.InputFile != null)
                         {
-                            RegexEngine.TestVideo(received.Data, engineParameters);
-                            RegexEngine.TestAudio(received.Data, engineParameters);
+                            //RegexEngine.TestVideo(received.Data, engineParameters);
+                            //RegexEngine.TestAudio(received.Data, engineParameters);
 
                             Match matchDuration = RegexEngine.Index[RegexEngine.Find.Duration].Match(received.Data);
                             if (matchDuration.Success)
                             {
-                                if (engineParameters.InputFile.Metadata == null)
-                                {
-                                    engineParameters.InputFile.Metadata = new Metadata();
-                                }
-
                                 TimeSpan.TryParse(matchDuration.Groups[1].Value, out totalMediaDuration);
-                                engineParameters.InputFile.Metadata.Duration = totalMediaDuration;
                             }
                         }
 

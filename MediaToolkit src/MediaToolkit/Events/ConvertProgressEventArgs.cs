@@ -1,7 +1,7 @@
 using MediaToolkit.Model;
 using System;
 
-namespace MediaToolkit
+namespace MediaToolkit.Events
 {
     public class ProgressEventArgs : EventArgs
     {
@@ -26,8 +26,8 @@ namespace MediaToolkit
             Speed = speed;
         }
 
-        public MediaFile InputFile { get; set; }
-        public MediaFile OutputFile { get; set; }
+        public string InputFile { get; set; }
+        public string OutputFile { get; set; }
         public long? Frame { get; private set; }
         public double? Fps { get; private set; }
         public int? SizeKb { get; private set; }

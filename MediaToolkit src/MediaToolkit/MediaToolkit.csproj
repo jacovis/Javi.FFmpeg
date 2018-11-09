@@ -60,12 +60,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandBuilder.cs" />
-    <Compile Include="ConvertProgressEventArgs.cs" />
-    <Compile Include="ConversionCompleteEventArgs.cs" />
+    <Compile Include="Events\ConvertProgressEventArgs.cs" />
+    <Compile Include="Events\ConversionCompleteEventArgs.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="EngineBase.cs" />
     <Compile Include="EngineParameters.cs" />
-    <Compile Include="Events\FFMpegException.cs" />
+    <Compile Include="Exceptions\FFMpegException.cs" />
     <Compile Include="FfmpegDataEventArgs.cs" />
     <Compile Include="FFmpegTask.cs" />
     <Compile Include="Model\Metadata.cs" />

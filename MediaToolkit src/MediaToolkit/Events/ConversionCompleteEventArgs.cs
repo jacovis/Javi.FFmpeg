@@ -1,7 +1,7 @@
 ﻿using MediaToolkit.Model;
 using System;
 
-namespace MediaToolkit
+namespace MediaToolkit.Events
 {
     public class CompletedEventArgs : EventArgs
     {
@@ -18,8 +18,8 @@ namespace MediaToolkit
             MuxingOverhead = muxingOverhead;
         }
 
-        public MediaFile InputFile { get; set; }
-        public MediaFile OutputFile { get; set; }
+        public string InputFile { get; set; }
+        public string OutputFile { get; set; }
         public double MuxingOverhead { get; internal set; }
         public TimeSpan TotalDuration { get; internal set; }
     }
