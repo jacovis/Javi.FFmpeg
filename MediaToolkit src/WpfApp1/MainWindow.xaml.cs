@@ -81,7 +81,7 @@ namespace WpfApp1
             using (var engine = new Engine(FfmpegFileName))
             {
                 engine.OnCompleted += (sender, e) => { OutputText(string.Format($"complete event: {e.MuxingOverhead} {e.TotalDuration}")); };
-                //engine.OnData += (sender, e) => { OutputText(e.Data); };
+                engine.OnData += (sender, e) => { OutputText(e.Data); };
 
                 // Save thumbnails
                 // For this sample thumbnails from 0:00:59 to 0:01:09 are grabbed every 42ms
@@ -91,14 +91,14 @@ namespace WpfApp1
                 {
                     OutputText(i.ToString());
 
-                    var options = new ConversionOptions { Seek = TimeSpan.FromMilliseconds((0 * 60 + 59) * 1000 + i * 42) };
-                    int hours = options.Seek.Value.Hours;
-                    int minutes = options.Seek.Value.Minutes;
-                    int seconds = options.Seek.Value.Seconds;
-                    int milliseconds = options.Seek.Value.Milliseconds;
+                    TimeSpan seekPosition = TimeSpan.FromMilliseconds((0 * 60 + 59) * 1000 + i * 42);
+                    int hours = seekPosition.Hours;
+                    int minutes = seekPosition.Minutes;
+                    int seconds = seekPosition.Seconds;
+                    int milliseconds = seekPosition.Milliseconds;
                     string timeString = hours.ToString("D2") + "." + minutes.ToString("D2") + "." + seconds.ToString("D2") + "." + milliseconds.ToString("D3");
                     string outputFile = Path.Combine(Path.GetDirectoryName(InputFile), Path.GetFileNameWithoutExtension(InputFile) + " " + timeString + ".jpg");
-                    engine.GetThumbnail(InputFile, outputFile, options);
+                    engine.GetThumbnail(InputFile, outputFile, seekPosition);
                 }
             }
             OutputText("***End grab thumbnail");

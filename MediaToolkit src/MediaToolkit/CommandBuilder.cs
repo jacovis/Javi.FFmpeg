@@ -1,5 +1,4 @@
-﻿using MediaToolkit.Model;
-using MediaToolkit.Options;
+﻿using MediaToolkit.Options;
 using MediaToolkit.Util;
 using System;
 using System.Globalization;

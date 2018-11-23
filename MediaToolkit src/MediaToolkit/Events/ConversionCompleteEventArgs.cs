@@ -1,5 +1,4 @@
-﻿using MediaToolkit.Model;
-using System;
+﻿using System;
 
 namespace MediaToolkit.Events
 {

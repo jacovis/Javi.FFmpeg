@@ -13,26 +13,37 @@ namespace MediaToolkit
 {
     using MediaToolkit.Events;
     using MediaToolkit.Exceptions;
-    using MediaToolkit.Model;
-    using MediaToolkit.Options;
     using MediaToolkit.Util;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Text.RegularExpressions;
     using System.Threading;
 
-    public class Engine : EngineBase
+    public class Engine : IDisposable
     {
+        #region Fields
+
         /// <summary>
         /// The standard arguments to pass to ffmpeg:
         /// -nostdin                Disable interaction on standard input.
         /// -y                      Overwrite output files without asking.
         /// -loglevel info          Set logging level
         /// </summary>
-        private readonly string standardArguments = "-nostdin -y -loglevel info ";
+        private readonly string StandardArguments = "-nostdin -y -loglevel info ";
+
+        /// <summary>   Full pathname of the FFmpeg file. </summary>
+        protected readonly string FFMpegFilePath;
+
+        /// <summary>   The ffmpeg process. </summary>
+        protected Process FFMpegProcess;
+
+        #endregion
+
+        #region Events
 
         /// <summary>
         /// Event fired for progress in ffmpeg process.
@@ -49,11 +60,80 @@ namespace MediaToolkit
         /// </summary>
         public event EventHandler<FfmpegDataEventArgs> OnData;
 
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Engine" /> class.
         /// </summary>
-        /// <param name="ffMpegPath"></param>
-        public Engine(string ffMpegPath) : base(ffMpegPath) { }
+        /// <param name="ffmpegPath">Path to ffmpeg executable.</param>
+        public Engine(string ffmpegPath)
+        {
+            this.FFMpegFilePath = ffmpegPath;
+
+            if (!File.Exists(this.FFMpegFilePath))
+            {
+                throw new MediaToolkit.Exceptions.FfmpegNotFoundException(this.FFMpegFilePath);
+            }
+        }
+
+        /// <summary>
+        /// Retrieve a thumbnail image from a video file.
+        /// </summary>
+        /// <param name="inputFile">Video file.</param>
+        /// <param name="outputFile">Image file.</param>
+        /// <param name="seekPosition">The seek position.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public void GetThumbnail(string inputFile, string outputFile, TimeSpan seekPosition, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            this.CustomCommand(inputFile,
+                ((FormattableString)$"-ss {seekPosition.TotalSeconds} -i \"{inputFile}\" -vframes 1  \"{outputFile}\"").ToString(CultureInfo.InvariantCulture),
+                cancellationToken);
+        }
+
+        /// <summary>
+        /// Extracts the subtitle.
+        /// </summary>
+        /// <param name="inputFile">The input file.</param>
+        /// <param name="outputFile">The output file.</param>
+        /// <param name="subtitleTrack">The subtitle text stream to extract. This number is zero based. Omit to extract the first subtitle stream.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public void ExtractSubtitle(string inputFile, string outputFile, int subtitleTrack = 0, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            this.CustomCommand(inputFile,
+                string.Format($"-i \"{inputFile}\" -vn -an -map 0:s:{subtitleTrack} -c:s:0 srt \"{outputFile}\""),
+                cancellationToken);
+        }
+
+        /// <summary>
+        /// Cuts the media.
+        /// </summary>
+        /// <param name="inputFile">The input file.</param>
+        /// <param name="outputFile">The output file.</param>
+        /// <param name="start">The starttime.</param>
+        /// <param name="end">The endtime.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public void CutMedia(string inputFile, string outputFile, TimeSpan start, TimeSpan end, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            this.CustomCommand(inputFile,
+                ((FormattableString)$"-ss {start} -to {end} -i \"{inputFile}\" -map 0:v? -c copy  -map 0:a? -c copy -map 0:s? -c copy \"{outputFile}\"").ToString(CultureInfo.InvariantCulture),
+                cancellationToken);
+        }
+
+        /// <summary>
+        /// Converts the audio to ac-3
+        /// </summary>
+        /// <param name="inputFile">The input file.</param>
+        /// <param name="outputFile">The output file.</param>
+        /// <param name="audioTrack">The audio track.</param>
+        /// <param name="bitRate">The bit rate.</param>
+        /// <param name="samplingRate">The sampling rate.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public void ConvertAudioAC3(string inputFile, string outputFile, int audioTrack, int bitRate, int samplingRate, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            this.CustomCommand(inputFile,
+                string.Format($" -hwaccel auto -i \"{inputFile}\" -map {audioTrack} -c:s copy -c:v copy -c:a ac3 -b:a {bitRate}k  -ar {samplingRate} \"{outputFile}\""),
+                cancellationToken);
+        }
 
         /// <summary>
         /// Call ffmpeg using a custom command.
@@ -62,6 +142,7 @@ namespace MediaToolkit
         /// </summary>
         /// <param name="inputFile">The input file.</param>
         /// <param name="ffmpegCommand">The ffmpeg command.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="ArgumentNullException">ffmpegCommand</exception>
         public void CustomCommand(string inputFile, string ffmpegCommand, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -81,77 +162,10 @@ namespace MediaToolkit
                 throw new FileNotFoundException("Input file not found", engineParameters.InputFile);
             }
 
-            this.StartFFmpegProcess(engineParameters, cancellationToken);
+            this.RunFFMpeg(engineParameters, cancellationToken);
         }
 
-        /// <summary>   
-        /// Retrieve a thumbnail image from a video file. 
-        /// </summary>
-        /// <param name="inputFile">    Video file. </param>
-        /// <param name="outputFile">   Image file. </param>
-        /// <param name="options">      Conversion options. </param>
-        public void GetThumbnail(string inputFile, string outputFile, ConversionOptions options, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            EngineParameters engineParams = new EngineParameters
-            {
-                InputFile = inputFile,
-                OutputFile = outputFile,
-                ConversionOptions = options,
-                Task = FFmpegTask.GetThumbnail
-            };
-
-            this.FFmpegEngine(engineParams, cancellationToken);
-        }
-
-        /// <summary>
-        /// Extracts the subtitle.
-        /// </summary>
-        /// <param name="inputFile">The input file.</param>
-        /// <param name="outputFile">The output file.</param>
-        /// <param name="subtitleTrack">The subtitle text stream to extract. This number is zero based. Omit to extract the first subtitle stream.</param>
-        public void ExtractSubtitle(string inputFile, string outputFile, int subtitleTrack = 0, CancellationToken cancellationToken = default(CancellationToken))
-        {
-
-            string ffmpegCommand = string.Format($"-i \"{inputFile}\" -vn -an -map 0:s:{subtitleTrack} -c:s:0 srt \"{outputFile}\"");
-            this.CustomCommand(inputFile, ffmpegCommand, cancellationToken);
-        }
-
-        /// <summary>
-        /// Cuts the media.
-        /// </summary>
-        /// <param name="inputFile">The input file.</param>
-        /// <param name="outputFile">The output file.</param>
-        /// <param name="start">The starttime.</param>
-        /// <param name="end">The endtime.</param>
-        public void CutMedia(string inputFile, string outputFile, TimeSpan start, TimeSpan end, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            string ffmpegCommand = string.Format($"-ss {start} -to {end} -i \"{inputFile}\" -map 0:v? -c copy  -map 0:a? -c copy -map 0:s? -c copy \"{outputFile}\"");
-            this.CustomCommand(inputFile, ffmpegCommand, cancellationToken);
-        }
-
-        /// <summary>
-        /// Converts the audio to ac-3
-        /// </summary>
-        /// <param name="inputFile">The input file.</param>
-        /// <param name="outputFile">The output file.</param>
-        /// <param name="audioTrack">The audio track.</param>
-        public void ConvertAudioAC3(string inputFile, string outputFile, int audioTrack, int bitRate, int samplingRate, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            string ffmpegCommand = standardArguments + string.Format($" -hwaccel auto -i \"{inputFile}\" -map {audioTrack} -c:s copy -c:v copy -c:a ac3 -b:a {bitRate}k  -ar {samplingRate} \"{outputFile}\"");
-            this.CustomCommand(inputFile, ffmpegCommand, cancellationToken);
-        }
-
-        #region Private method - Helpers
-
-        private void FFmpegEngine(EngineParameters engineParameters, CancellationToken cancellationToken)
-        {
-            if (!engineParameters.InputFile.StartsWith("http://") && !File.Exists(engineParameters.InputFile))
-            {
-                throw new FileNotFoundException("Input file not found", engineParameters.InputFile);
-            }
-
-            this.StartFFmpegProcess(engineParameters, cancellationToken);
-        }
+        #region Private method helpers
 
         private ProcessStartInfo GenerateStartInfo(EngineParameters engineParameters)
         {
@@ -164,8 +178,8 @@ namespace MediaToolkit
         {
             return new ProcessStartInfo
             {
-                Arguments = standardArguments + arguments,
-                FileName = this.FFmpegFilePath,
+                Arguments = StandardArguments + arguments,
+                FileName = this.FFMpegFilePath,
                 CreateNoWindow = true,
                 RedirectStandardInput = false,
                 RedirectStandardOutput = true,
@@ -177,18 +191,12 @@ namespace MediaToolkit
 
         #endregion
 
-        /// -------------------------------------------------------------------------------------------------
-        /// <summary>   Starts FFmpeg process. </summary>
-        /// <exception cref="InvalidOperationException">
-        ///     Thrown when the requested operation is
-        ///     invalid.
-        /// </exception>
-        /// <exception cref="Exception">
-        ///     Thrown when an exception error condition
-        ///     occurs.
-        /// </exception>
-        /// <param name="engineParameters"> The engine parameters. </param>
-        private void StartFFmpegProcess(EngineParameters engineParameters, CancellationToken cancellationToken)
+        /// <summary>
+        /// Starts FFmpeg process.
+        /// </summary>
+        /// <param name="engineParameters">The engine parameters.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private void RunFFMpeg(EngineParameters engineParameters, CancellationToken cancellationToken)
         {
             List<string> receivedMessagesLog = new List<string>();
             TimeSpan totalMediaDuration = new TimeSpan();
@@ -197,11 +205,13 @@ namespace MediaToolkit
                                               ? this.GenerateStartInfo(engineParameters.CustomArguments)
                                               : this.GenerateStartInfo(engineParameters);
 
-            using (this.FFmpegProcess = Process.Start(processStartInfo))
+            this.OnData?.Invoke(this, new FfmpegDataEventArgs(processStartInfo.Arguments));
+
+            using (this.FFMpegProcess = Process.Start(processStartInfo))
             {
                 Exception caughtException = null;
 
-                this.FFmpegProcess.ErrorDataReceived += (sender, received) =>
+                this.FFMpegProcess.ErrorDataReceived += (sender, received) =>
                 {
                     if (received.Data == null) return;
 
@@ -245,7 +255,7 @@ namespace MediaToolkit
 
                         try
                         {
-                            this.FFmpegProcess.Kill();
+                            this.FFMpegProcess.Kill();
                         }
                         catch (InvalidOperationException)
                         {
@@ -255,16 +265,16 @@ namespace MediaToolkit
                     }
                 };
 
-                this.FFmpegProcess.BeginErrorReadLine();
+                this.FFMpegProcess.BeginErrorReadLine();
                 if (cancellationToken != null)
                 {
-                    while (!this.FFmpegProcess.WaitForExit(100))
+                    while (!this.FFMpegProcess.WaitForExit(100))
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
                             try
                             {
-                                this.FFmpegProcess.Kill();
+                                this.FFMpegProcess.Kill();
                             }
                             catch (Win32Exception)
                             {
@@ -275,7 +285,7 @@ namespace MediaToolkit
                 }
                 else
                 {
-                    this.FFmpegProcess.WaitForExit();
+                    this.FFMpegProcess.WaitForExit();
                 }
 
                 if (cancellationToken.IsCancellationRequested)
@@ -283,11 +293,58 @@ namespace MediaToolkit
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
-                if ((this.FFmpegProcess.ExitCode != 0 && this.FFmpegProcess.ExitCode != 1) || caughtException != null)
+                if (this.FFMpegProcess.ExitCode != 0 || caughtException != null)
                 {
-                    throw new FFMpegException(this.FFmpegProcess.ExitCode + ": " + receivedMessagesLog[1] + receivedMessagesLog[0], caughtException);
+                    if (this.FFMpegProcess.ExitCode != 1)
+                    {
+                        throw new FFMpegException(this.FFMpegProcess.ExitCode + ": " + receivedMessagesLog[1] + receivedMessagesLog[0], caughtException);
+                    }
+                    else
+                    {
+                        throw new FFMpegException("ffmpeg exited with errorcode 1", caughtException);
+                    }
                 }
             }
         }
+
+        #region IDisposable
+        private bool isdisposed = false;
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.isdisposed)
+            {
+                if (this.FFMpegProcess != null)
+                {
+                    this.FFMpegProcess.Dispose();
+                }
+                this.FFMpegProcess = null;
+
+                isdisposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="Engine"/> class.
+        /// </summary>
+        ~Engine()
+        {
+            Dispose(false);
+        }
+        #endregion
+
     }
 }
