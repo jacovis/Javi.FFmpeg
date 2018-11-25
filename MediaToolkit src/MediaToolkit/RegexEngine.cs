@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using MediaToolkit.Events;
 
-namespace MediaToolkit.Util
+namespace MediaToolkit
 {
     /// <summary>
     ///     Contains all Regex tasks
@@ -16,7 +16,6 @@ namespace MediaToolkit.Util
         /// </summary>
         internal static Dictionary<Find, Regex> Index = new Dictionary<Find, Regex>
         {
-            {Find.BitRate, new Regex(@"([0-9]*)\s*kb/s")},
             {Find.Duration, new Regex(@"Duration: ([^,]*), ")},
             {Find.ConvertProgressFrame, new Regex(@"frame=\s*([0-9]*)")},
             {Find.ConvertProgressFps, new Regex(@"fps=\s*([0-9]*\.?[0-9]*?)")},
@@ -25,16 +24,11 @@ namespace MediaToolkit.Util
             {Find.ConvertProgressTime, new Regex(@"time=\s*([^ ]*)")},
             {Find.ConvertProgressBitrate, new Regex(@"bitrate=\s*([0-9]*\.?[0-9]*?)kbits/s")},
             {Find.ConvertProgressSpeed, new Regex(@"speed=\s*([0-9]*\.?[0-9]*[e]*[+]*[0-9]*?)x")},
-            {Find.MetaAudio, new Regex(@"(Stream\s*#[0-9]*:[0-9]*\(?[^\)]*?\)?: Audio:.*)")},
-            {Find.AudioFormatHzChannel, new Regex(@"Audio:\s*([^,]*),\s([^,]*),\s([^,]*)")},
-            {Find.MetaVideo, new Regex(@"(Stream\s*#[0-9]*:[0-9]*\(?[^\)]*?\)?: Video:.*)")},
-            {Find.VideoFormatColorSize, new Regex(@"Video:\s*([^,]*),\s*([^,]*,?[^,]*?),?\s*(?=[0-9]*x[0-9]*)([0-9]*x[0-9]*)")},
-            {Find.VideoFps, new Regex(@"([0-9\.]*)\s*tbr")}
         };
 
         internal enum Find
         {
-            AudioFormatHzChannel,
+            Duration,
             ConvertProgressSpeed,
             ConvertProgressBitrate,
             ConvertProgressFps,
@@ -42,20 +36,33 @@ namespace MediaToolkit.Util
             ConvertProgressSize,
             ConvertProgressFinished,
             ConvertProgressTime,
-            Duration,
-            MetaAudio,
-            MetaVideo,
-            BitRate,
-            VideoFormatColorSize,
-            VideoFps
+        }
+
+        /// <summary>
+        /// Check if data contains the media duration. If so return this duration.
+        /// </summary>
+        /// <param name="data">Event data from ffmpeg.</param>
+        /// <param name="mediaDuration">Duration of the media.</param>
+        /// <returns></returns>
+        internal static bool MediaDuration(string data, out TimeSpan mediaDuration)
+        {
+            bool result = false;
+            mediaDuration = TimeSpan.Zero;
+
+            Match matchDuration = RegexEngine.Index[RegexEngine.Find.Duration].Match(data);
+            if (matchDuration.Success)
+            {
+                result = TimeSpan.TryParse(matchDuration.Groups[1].Value, out mediaDuration);
+            }
+
+            return result;
         }
 
         /// <summary>
         /// Establishes whether the data contains progress information.
         /// </summary>
-        /// <param name="data">Event data from the FFmpeg console.</param>
-        /// <param name="progressEventArgs">If successful, outputs a <see cref="ProgressEventArgs"/> which is generated from the data.
-        /// </param>
+        /// <param name="data">Event data from ffmpeg.</param>
+        /// <param name="progressEventArgs">If successful, outputs a <see cref="ProgressEventArgs"/> which is generated from the data.</param>
         internal static bool IsProgressData(string data, out ProgressEventArgs progressEventArgs)
         {
             progressEventArgs = null;
@@ -79,6 +86,26 @@ namespace MediaToolkit.Util
             double? speed = GetDoubleValue(matchSpeed);
 
             progressEventArgs = new ProgressEventArgs(processedDuration, TimeSpan.Zero, frame, fps, sizeKb, bitrate, speed);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Establishes whether the data indicates the conversion is complete.
+        /// </summary>
+        /// <param name="data">Event data from ffmpeg.</param>
+        /// <param name="conversionCompleteEvent">If successful, outputs a <see cref="CompletedEventArgs"/> which is generated from the data.</param>
+        internal static bool IsConvertCompleteData(string data, out CompletedEventArgs conversionCompleteEvent)
+        {
+            conversionCompleteEvent = null;
+
+            Match matchFinished = Index[Find.ConvertProgressFinished].Match(data);
+
+            if (!matchFinished.Success) return false;
+
+            Double.TryParse(matchFinished.Groups[2].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double muxingOverhead);
+
+            conversionCompleteEvent = new CompletedEventArgs(TimeSpan.Zero, muxingOverhead);
 
             return true;
         }
@@ -117,31 +144,6 @@ namespace MediaToolkit.Util
             {
                 return null;
             }
-        }
-
-
-        /// <summary>
-        ///     <para> ---- </para>
-        ///     <para>Establishes whether the data indicates the conversion is complete</para>
-        /// </summary>
-        /// <param name="data">Event data from the FFmpeg console.</param>
-        /// <param name="conversionCompleteEvent">
-        ///     <para>If successful, outputs a <see cref="CompletedEventArgs"/> which is </para>
-        ///     <para>generated from the data. </para>
-        /// </param>
-        internal static bool IsConvertCompleteData(string data, out CompletedEventArgs conversionCompleteEvent)
-        {
-            conversionCompleteEvent = null;
-
-            Match matchFinished = Index[Find.ConvertProgressFinished].Match(data);
-
-            if (!matchFinished.Success) return false;
-
-            Double.TryParse(matchFinished.Groups[2].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double muxingOverhead);
-
-            conversionCompleteEvent = new CompletedEventArgs(TimeSpan.Zero, muxingOverhead);
-
-            return true;
         }
     }
 }

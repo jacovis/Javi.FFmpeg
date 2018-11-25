@@ -1,3 +1,18 @@
+/// MediaToolkit
+/// see https://github.com/AydinAdn/MediaToolkit
+/// for features and samples.
+/// JV Sep 2018 changes:
+/// - removed the resource embedded ffmpeg.exe executable; the caller must now always specify the path to the executable
+/// - deleted linux targeted code
+/// - event ConversionCompleteEvent gets called now, the original source did not handle the complete event correctly
+/// - added ExtractSubtitle method
+/// - added CutMedia method; the standard method of cutting media resulted in reencode of the inputfile
+/// - added ConvertAudioAC3 method
+/// - alle the above methods use the new method FFMpegCommand which is the entry point for calling the ffmpeg executable with an inputfile, outputfile and command line arguments for ffmpeg.
+/// - Removed all code for metdata resolving. If metadata is needed, then the package Javi.MediaInfo is the better choice.
+/// - Refactored code.
+
+
 MediaToolkit
 ============
 

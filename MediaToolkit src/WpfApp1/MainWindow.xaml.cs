@@ -4,6 +4,7 @@ using MediaToolkit.Exceptions;
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -187,23 +188,27 @@ namespace WpfApp1
 
         private void HandleProgressEvent(object sender, ProgressEventArgs e)
         {
-            OutputText("ConvertProgressEvent");
+            var sb = new StringBuilder();
+            sb.AppendLine("ConvertProgressEvent");
+            sb.AppendLine($"    Bitrate: {e.Bitrate}");
+            sb.AppendLine($"    Fps: {e.Fps}");
+            sb.AppendLine($"    Frame: {e.Frame}");
+            sb.AppendLine($"    ProcessedDuration: {e.ProcessedDuration}");
+            sb.AppendLine($"    SizeKb: {e.SizeKb}");
+            sb.AppendLine($"    Speed: {e.Speed}");
+            sb.Append($"    TotalDuration: {e.TotalDuration}");
 
-            OutputText($"    Bitrate: {e.Bitrate}");
-            OutputText($"    Fps: {e.Fps}");
-            OutputText($"    Frame: {e.Frame}");
-            OutputText($"    ProcessedDuration: {e.ProcessedDuration}");
-            OutputText($"    SizeKb: {e.SizeKb}");
-            OutputText($"    Speed: {e.Speed}");
-            OutputText($"    TotalDuration: {e.TotalDuration}");
+            OutputText(sb.ToString());
         }
 
         private void HandleCompleteEvent(object sender, CompletedEventArgs e)
         {
-            OutputText("ConversionCompleteEvent");
+            var sb = new StringBuilder();
+            sb.AppendLine("ConversionCompleteEvent");
+            sb.AppendLine($"    MuxingOverhead: {e.MuxingOverhead}");
+            sb.Append($"    TotalDuration: {e.TotalDuration}");
 
-            OutputText($"    MuxingOverhead: {e.MuxingOverhead}");
-            OutputText($"    TotalDuration: {e.TotalDuration}");
+            OutputText(sb.ToString());
         }
 
         private void OutputText(string text)
