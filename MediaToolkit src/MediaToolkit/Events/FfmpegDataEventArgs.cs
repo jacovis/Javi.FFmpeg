@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MediaToolkit
+namespace MediaToolkit.Events
 {
     /// <summary>
     /// Data from the running ffmpeg process.

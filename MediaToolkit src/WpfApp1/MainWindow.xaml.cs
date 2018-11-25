@@ -1,7 +1,6 @@
 ﻿using MediaToolkit;
 using MediaToolkit.Events;
 using MediaToolkit.Exceptions;
-using MediaToolkit.Options;
 using Microsoft.Win32;
 using System;
 using System.IO;

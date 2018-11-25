@@ -32,14 +32,29 @@ namespace MediaToolkit.Util
             {Find.VideoFps, new Regex(@"([0-9\.]*)\s*tbr")}
         };
 
+        internal enum Find
+        {
+            AudioFormatHzChannel,
+            ConvertProgressSpeed,
+            ConvertProgressBitrate,
+            ConvertProgressFps,
+            ConvertProgressFrame,
+            ConvertProgressSize,
+            ConvertProgressFinished,
+            ConvertProgressTime,
+            Duration,
+            MetaAudio,
+            MetaVideo,
+            BitRate,
+            VideoFormatColorSize,
+            VideoFps
+        }
+
         /// <summary>
-        ///     <para> ---- </para>
-        ///     <para>Establishes whether the data contains progress information.</para>
+        /// Establishes whether the data contains progress information.
         /// </summary>
         /// <param name="data">Event data from the FFmpeg console.</param>
-        /// <param name="progressEventArgs">
-        ///     <para>If successful, outputs a <see cref="ProgressEventArgs"/> which is </para>
-        ///     <para>generated from the data. </para>
+        /// <param name="progressEventArgs">If successful, outputs a <see cref="ProgressEventArgs"/> which is generated from the data.
         /// </param>
         internal static bool IsProgressData(string data, out ProgressEventArgs progressEventArgs)
         {
@@ -127,77 +142,6 @@ namespace MediaToolkit.Util
             conversionCompleteEvent = new CompletedEventArgs(TimeSpan.Zero, muxingOverhead);
 
             return true;
-        }
-
-        /*internal static void TestVideo(string data, EngineParameters engine)
-        {
-            Match matchMetaVideo = Index[Find.MetaVideo].Match(data);
-
-            if (!matchMetaVideo.Success) return;
-
-            string fullMetadata = matchMetaVideo.Groups[1].ToString();
-
-            GroupCollection matchVideoFormatColorSize = Index[Find.VideoFormatColorSize].Match(fullMetadata).Groups;
-            GroupCollection matchVideoFps = Index[Find.VideoFps].Match(fullMetadata).Groups;
-            Match matchVideoBitRate = Index[Find.BitRate].Match(fullMetadata);
-
-            if (engine.InputFile.Metadata == null)
-                engine.InputFile.Metadata = new Metadata();
-
-            if (engine.InputFile.Metadata.VideoData == null)
-                engine.InputFile.Metadata.VideoData = new Metadata.Video
-                {
-                    Format = matchVideoFormatColorSize[1].ToString(),
-                    ColorModel = matchVideoFormatColorSize[2].ToString(),
-                    FrameSize = matchVideoFormatColorSize[3].ToString(),
-                    Fps = matchVideoFps[1].Success && !string.IsNullOrEmpty(matchVideoFps[1].ToString()) ? Convert.ToDouble(matchVideoFps[1].ToString(), new CultureInfo("en-US")) : 0,
-                    BitRateKbs =
-                        matchVideoBitRate.Success
-                            ? (int?)Convert.ToInt32(matchVideoBitRate.Groups[1].ToString())
-                            : null
-                };
-        }
-
-        internal static void TestAudio(string data, EngineParameters engine)
-        {
-            Match matchMetaAudio = Index[Find.MetaAudio].Match(data);
-
-            if (!matchMetaAudio.Success) return;
-
-            string fullMetadata = matchMetaAudio.Groups[1].ToString();
-
-            GroupCollection matchAudioFormatHzChannel = Index[Find.AudioFormatHzChannel].Match(fullMetadata).Groups;
-            GroupCollection matchAudioBitRate = Index[Find.BitRate].Match(fullMetadata).Groups;
-
-            if (engine.InputFile.Metadata == null)
-                engine.InputFile.Metadata = new Metadata();
-
-            if (engine.InputFile.Metadata.AudioData == null)
-                engine.InputFile.Metadata.AudioData = new Metadata.Audio
-                {
-                    Format = matchAudioFormatHzChannel[1].ToString(),
-                    SampleRate = matchAudioFormatHzChannel[2].ToString(),
-                    ChannelOutput = matchAudioFormatHzChannel[3].ToString(),
-                    BitRateKbs = !(string.IsNullOrWhiteSpace(matchAudioBitRate[1].ToString())) ? Convert.ToInt32(matchAudioBitRate[1].ToString()) : 0
-                };
-        }*/
-
-        internal enum Find
-        {
-            AudioFormatHzChannel,
-            ConvertProgressSpeed,
-            ConvertProgressBitrate,
-            ConvertProgressFps,
-            ConvertProgressFrame,
-            ConvertProgressSize,
-            ConvertProgressFinished,
-            ConvertProgressTime,
-            Duration,
-            MetaAudio,
-            MetaVideo,
-            BitRate,
-            VideoFormatColorSize,
-            VideoFps
         }
     }
 }
