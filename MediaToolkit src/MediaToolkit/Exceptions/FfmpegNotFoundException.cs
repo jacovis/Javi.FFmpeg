@@ -2,18 +2,18 @@
 
 namespace MediaToolkit.Exceptions
 {
-    public class FfmpegNotFoundException : Exception
+    public class FFmpegNotFoundException : Exception
     {
-        public FfmpegNotFoundException()
+        public FFmpegNotFoundException()
         {
         }
 
-        public FfmpegNotFoundException(string message)
+        public FFmpegNotFoundException(string message)
             : base(message)
         {
         }
 
-        public FfmpegNotFoundException(string message, Exception inner)
+        public FFmpegNotFoundException(string message, Exception inner)
             : base(message, inner)
         {
         }

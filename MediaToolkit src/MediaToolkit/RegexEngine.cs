@@ -62,8 +62,8 @@ namespace MediaToolkit
         /// Establishes whether the data contains progress information.
         /// </summary>
         /// <param name="data">Event data from ffmpeg.</param>
-        /// <param name="progressEventArgs">If successful, outputs a <see cref="ProgressEventArgs"/> which is generated from the data.</param>
-        internal static bool IsProgressData(string data, out ProgressEventArgs progressEventArgs)
+        /// <param name="progressEventArgs">If successful, outputs a <see cref="FFmpegProgressEventArgs"/> which is generated from the data.</param>
+        internal static bool IsProgressData(string data, out FFmpegProgressEventArgs progressEventArgs)
         {
             progressEventArgs = null;
 
@@ -85,7 +85,7 @@ namespace MediaToolkit
             double? bitrate = GetDoubleValue(matchBitrate);
             double? speed = GetDoubleValue(matchSpeed);
 
-            progressEventArgs = new ProgressEventArgs(processedDuration, TimeSpan.Zero, frame, fps, sizeKb, bitrate, speed);
+            progressEventArgs = new FFmpegProgressEventArgs(processedDuration, TimeSpan.Zero, frame, fps, sizeKb, bitrate, speed);
 
             return true;
         }
@@ -94,8 +94,8 @@ namespace MediaToolkit
         /// Establishes whether the data indicates the conversion is complete.
         /// </summary>
         /// <param name="data">Event data from ffmpeg.</param>
-        /// <param name="conversionCompleteEvent">If successful, outputs a <see cref="CompletedEventArgs"/> which is generated from the data.</param>
-        internal static bool IsConvertCompleteData(string data, out CompletedEventArgs conversionCompleteEvent)
+        /// <param name="conversionCompleteEvent">If successful, outputs a <see cref="FFmpegCompletedEventArgs"/> which is generated from the data.</param>
+        internal static bool IsConvertCompleteData(string data, out FFmpegCompletedEventArgs conversionCompleteEvent)
         {
             conversionCompleteEvent = null;
 
@@ -105,7 +105,7 @@ namespace MediaToolkit
 
             Double.TryParse(matchFinished.Groups[2].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double muxingOverhead);
 
-            conversionCompleteEvent = new CompletedEventArgs(TimeSpan.Zero, muxingOverhead);
+            conversionCompleteEvent = new FFmpegCompletedEventArgs(TimeSpan.Zero, muxingOverhead);
 
             return true;
         }

@@ -95,9 +95,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MediaToolkit\MediaToolkit.csproj">
+    <ProjectReference Include="..\MediaToolkit\Javi.FFmpeg.csproj">
       <Project>{124ab335-eeac-416f-b06b-80ad3cf56e38}</Project>
-      <Name>MediaToolkit</Name>
+      <Name>Javi.FFmpeg</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

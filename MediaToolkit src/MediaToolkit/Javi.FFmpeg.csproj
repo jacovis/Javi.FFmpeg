@@ -59,12 +59,12 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\ConvertProgressEventArgs.cs" />
-    <Compile Include="Events\ConversionCompleteEventArgs.cs" />
-    <Compile Include="Engine.cs" />
-    <Compile Include="Exceptions\FFMpegException.cs" />
-    <Compile Include="Exceptions\FfmpegNotFoundException.cs" />
-    <Compile Include="Events\FfmpegDataEventArgs.cs" />
+    <Compile Include="Events\FFmpegProgressEventArgs.cs" />
+    <Compile Include="Events\FFmpegCompletedEventArgs.cs" />
+    <Compile Include="FFmpeg.cs" />
+    <Compile Include="Exceptions\FFmpegException.cs" />
+    <Compile Include="Exceptions\FFmpegNotFoundException.cs" />
+    <Compile Include="Events\FFmpegDataEventArgs.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

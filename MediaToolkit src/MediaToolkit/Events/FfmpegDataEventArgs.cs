@@ -3,15 +3,15 @@
 namespace MediaToolkit.Events
 {
     /// <summary>
-    /// Data from the running ffmpeg process.
+    /// Raw data from the running ffmpeg process as output by ffmpeg.
     /// </summary>
-    public class FfmpegDataEventArgs : EventArgs
+    public class FFmpegDataEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FfmpegDataEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="FFmpegDataEventArgs"/> class.
         /// </summary>
         /// <param name="data">The data.</param>
-        public FfmpegDataEventArgs(string data)
+        public FFmpegDataEventArgs(string data)
         {
             this.Data = data;
         }

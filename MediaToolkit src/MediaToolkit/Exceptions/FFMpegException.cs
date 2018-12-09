@@ -2,18 +2,18 @@
 
 namespace MediaToolkit.Exceptions
 {
-    public class FFMpegException : Exception
+    public class FFmpegException : Exception
     {
-        public FFMpegException()
+        public FFmpegException()
         {
         }
 
-        public FFMpegException(string message)
+        public FFmpegException(string message)
             : base(message)
         {
         }
 
-        public FFMpegException(string message, Exception inner)
+        public FFmpegException(string message, Exception inner)
             : base(message, inner)
         {
         }

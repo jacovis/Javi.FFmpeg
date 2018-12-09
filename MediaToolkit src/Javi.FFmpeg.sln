@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaToolkit", "MediaToolkit\MediaToolkit.csproj", "{124AB335-EEAC-416F-B06B-80AD3CF56E38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Javi.FFmpeg", "MediaToolkit\Javi.FFmpeg.csproj", "{124AB335-EEAC-416F-B06B-80AD3CF56E38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication", "WpfApp1\TestApplication.csproj", "{7F466283-A508-450B-9A9C-85865EADC1FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "WpfApp1\Demo.csproj", "{7F466283-A508-450B-9A9C-85865EADC1FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -21,7 +21,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <Button Content="Cancel" Height="25" MinWidth="75" Margin="5" Click="Cancel_Click"/>
+                <Button Content="Cancel" Height="25" MinWidth="75" Margin="5" Click="Cancel_Click" ToolTip="In this demo, only functional for 'Convert EAC'"/>
                 <Button Content="Clear" Height="25" MinWidth="75" Margin="5" Click="Clear_Click"/>
             </StackPanel>
             

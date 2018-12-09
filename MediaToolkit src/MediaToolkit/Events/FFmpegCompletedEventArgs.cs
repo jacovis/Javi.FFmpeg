@@ -2,7 +2,7 @@
 
 namespace MediaToolkit.Events
 {
-    public class CompletedEventArgs : EventArgs
+    public class FFmpegCompletedEventArgs : EventArgs
     {
         /// <summary>
         /// Raises notification once conversion is complete
@@ -11,7 +11,7 @@ namespace MediaToolkit.Events
         /// <param name="OutputFile">The output file.</param>
         /// <param name="totalDuration">The total duration of the original media</param>
         /// <param name="muxingOverhead">The muxing overhead.</param>
-        public CompletedEventArgs(TimeSpan totalDuration, double muxingOverhead)
+        public FFmpegCompletedEventArgs(TimeSpan totalDuration, double muxingOverhead)
         {
             TotalDuration = totalDuration;
             MuxingOverhead = muxingOverhead;

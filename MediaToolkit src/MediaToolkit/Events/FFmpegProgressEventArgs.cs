@@ -2,7 +2,7 @@ using System;
 
 namespace MediaToolkit.Events
 {
-    public class ProgressEventArgs : EventArgs
+    public class FFmpegProgressEventArgs : EventArgs
     {
         /// <summary>
         /// Raises notifications on the conversion process
@@ -14,7 +14,7 @@ namespace MediaToolkit.Events
         /// <param name="sizeKb">The current size in Kb of the converted media</param>
         /// <param name="bitrate">The bit rate of the converted media</param>
         /// <param name="speed">The speed.</param>
-        public ProgressEventArgs(TimeSpan processed, TimeSpan totalDuration, long? frame, double? fps, int? sizeKb, double? bitrate, double? speed)
+        public FFmpegProgressEventArgs(TimeSpan processed, TimeSpan totalDuration, long? frame, double? fps, int? sizeKb, double? bitrate, double? speed)
         {
             TotalDuration = totalDuration;
             ProcessedDuration = processed;
