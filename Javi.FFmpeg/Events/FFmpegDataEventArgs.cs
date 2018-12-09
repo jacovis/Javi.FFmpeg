@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MediaToolkit.Events
+namespace Javi.FFmpeg.Events
 {
     /// <summary>
     /// Raw data from the running ffmpeg process as output by ffmpeg.

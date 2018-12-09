@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MediaToolkit.Exceptions
+namespace Javi.FFmpeg.Exceptions
 {
     public class FFmpegNotFoundException : Exception
     {

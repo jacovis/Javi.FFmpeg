@@ -95,7 +95,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MediaToolkit\Javi.FFmpeg.csproj">
+    <ProjectReference Include="..\Javi.FFmpeg\Javi.FFmpeg.csproj">
       <Project>{124ab335-eeac-416f-b06b-80ad3cf56e38}</Project>
       <Name>Javi.FFmpeg</Name>
     </ProjectReference>

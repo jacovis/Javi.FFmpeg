@@ -1,6 +1,6 @@
-﻿using MediaToolkit;
-using MediaToolkit.Events;
-using MediaToolkit.Exceptions;
+﻿using Javi.FFmpeg;
+using Javi.FFmpeg.Events;
+using Javi.FFmpeg.Exceptions;
 using Microsoft.Win32;
 using System;
 using System.IO;
@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WpfApp1
+namespace Demo
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

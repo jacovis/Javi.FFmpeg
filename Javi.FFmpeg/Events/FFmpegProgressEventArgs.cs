@@ -1,6 +1,6 @@
 using System;
 
-namespace MediaToolkit.Events
+namespace Javi.FFmpeg.Events
 {
     public class FFmpegProgressEventArgs : EventArgs
     {

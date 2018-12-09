@@ -1,5 +1,5 @@
-﻿using MediaToolkit.Events;
-using MediaToolkit.Exceptions;
+﻿using Javi.FFmpeg.Events;
+using Javi.FFmpeg.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 
-namespace MediaToolkit
+namespace Javi.FFmpeg
 {
     public class FFmpeg : IDisposable
     {

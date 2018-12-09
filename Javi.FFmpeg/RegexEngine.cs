@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using MediaToolkit.Events;
+using Javi.FFmpeg.Events;
 
-namespace MediaToolkit
+namespace Javi.FFmpeg
 {
     /// <summary>
     ///     Contains all Regex tasks
