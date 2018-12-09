@@ -1,8 +1,8 @@
+using Javi.FFmpeg.Events;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Globalization;
-using Javi.FFmpeg.Events;
+using System.Text.RegularExpressions;
 
 namespace Javi.FFmpeg
 {

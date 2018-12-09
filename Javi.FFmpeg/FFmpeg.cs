@@ -53,6 +53,7 @@ namespace Javi.FFmpeg
 
         #endregion
 
+        #region Constructor
         /// <summary>
         /// Initializes a new instance of the <see cref="FFmpeg" /> class.
         /// </summary>
@@ -66,7 +67,9 @@ namespace Javi.FFmpeg
                 throw new FFmpegNotFoundException(this.FFmpegPath);
             }
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// Retrieve a thumbnail image from a video file.
         /// </summary>
@@ -265,6 +268,8 @@ namespace Javi.FFmpeg
                 WindowStyle = ProcessWindowStyle.Hidden
             };
         }
+
+        #endregion
 
         #region IDisposable
         private bool isdisposed = false;
