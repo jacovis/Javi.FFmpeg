@@ -240,4 +240,3 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/Application/Properties/AssemblyInfo.cs
