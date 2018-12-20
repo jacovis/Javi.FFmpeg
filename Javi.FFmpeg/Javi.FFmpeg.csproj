@@ -5,6 +5,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 
+        <Title>FFmpeg wrapper</Title>
         <PackageId>Javi.FFmpeg</PackageId>
         <PackageDescription>A wrapper for the ffmpeg command line tool.</PackageDescription>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
