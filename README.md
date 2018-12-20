@@ -1,7 +1,17 @@
 # <img align="center" src="./PackageIcon.png">  Javi.FFmpeg
 
-One Paragraph of project description goes here
+This dotnet standard package provides a C# wrapper for the [FFmpeg](https://ffmpeg.org/) commandline application.<br>
+FFmpeg is able to convert, decode, encode, transcode, mux, demux, stream, split and slice video and audio files
+supporting pretty much any format out there.<br>
 
+## Getting Started
+
+Install Javi.FFmpeg from NuGet using the Package Manager Console with the following command 
+(or search on [NuGet Javi.FFmpeg](https://www.nuget.org/packages/Javi.FFmpeg))
+
+    PM> Install-Package Javi.FFmpeg
+
+    
 ## Versioning
 
 [SemVer](http://semver.org/) is used for versioning. For the versions available, see the [tags on this repository](https://github.com/jacovis/Javi.FFmpeg/tags).
@@ -16,10 +26,14 @@ The code in this package is based on the work from [AydinAdn/MediaToolkit](https
 This code is a more simplified version where functions based on ffmpeg functionality are simple calls to the ffmpeg 
 commandline using custom command line options without any intermediary methods. Using google it is easy to retrieve 
 custom command lines for use with ffmpeg, these google results can be easily implemented using the Run method
-in class FFmpeg.  
+in class FFmpeg.<br>
+<br>
 The support to retrieve meta data from media files has been deleted. If meta data retrieval is required, I 
-suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo).  
+suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo).<br>
 This package is a wrapper for [MediaInfo](https://mediaarea.net/en/MediaInfo).
+
+
+
 
 ## to be removed stuff:
 
