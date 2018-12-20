@@ -7,7 +7,7 @@
 
         <PackageId>Javi.FFmpeg</PackageId>
         <PackageDescription>A wrapper for the ffmpeg command line tool.</PackageDescription>
-        <PackageLicenseUrl>https://github.com/jacovis/Javi.FFmpeg/blob/master/LICENSE.md</PackageLicenseUrl>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageProjectUrl>https://github.com/jacovis/Javi.FFmpeg</PackageProjectUrl>
         <PackageIconUrl>https://github.com/jacovis/Javi.FFmpeg/blob/master/PackageIcon.png</PackageIconUrl>
         <PackageTags>ffmpeg;wrapper</PackageTags>
@@ -17,7 +17,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Include="..\PackageIcon.png" Link="PackageIcon.png" />
+        <None Include="..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\PackageIcon.png" Link="PackageIcon.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Sample.avi">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

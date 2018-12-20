@@ -28,22 +28,20 @@ namespace Demo
             InitializeComponent();
         }
 
-        private string SelectFile(string defaultExt = "", string title = "")
+        private void Run_Click(object sender, RoutedEventArgs e)
         {
-            string result = string.Empty;
+            OutputText("***Start FFmpeg");
 
-            OpenFileDialog ofd = new OpenFileDialog
+            using (var ffmpeg = new FFmpeg(FFmpegFileName))
             {
-                DefaultExt = defaultExt,
-                Title = title,
-            };
+                string inputFile = "Sample.avi";
+                string outputFile = "Sample.mkv";
+                string commandLine = string.Format($"-i \"{inputFile}\" \"{outputFile}\"");
 
-            if (ofd.ShowDialog() == true)
-            {
-                result = ofd.FileName;
+                ffmpeg.Run(inputFile, outputFile, commandLine);
             }
 
-            return result;
+            OutputText("***End FFmpeg");
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -210,6 +208,24 @@ namespace Demo
             OutputText(sb.ToString());
         }
 
+        private string SelectFile(string defaultExt = "", string title = "")
+        {
+            string result = string.Empty;
+
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                DefaultExt = defaultExt,
+                Title = title,
+            };
+
+            if (ofd.ShowDialog() == true)
+            {
+                result = ofd.FileName;
+            }
+
+            return result;
+        }
+
         private void OutputText(string text)
         {
             if (Application.Current == null) { return; }
@@ -224,7 +240,5 @@ namespace Demo
                 this.TextBlockMediaInfo.ScrollToEnd();
             }
         }
-
-
     }
 }

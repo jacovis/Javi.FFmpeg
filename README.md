@@ -35,12 +35,12 @@ text
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/jacovis/Javi.FFmpeg/blob/master/LICENSE.txt) file for details
 
 ## Acknowledgments
 
 The code in this package is based on the work from [AydinAdn/MediaToolkit](https://github.com/AydinAdn/MediaToolkit)<br>
-This code is a simplified version where functions based on FFmpeg functionality have become calls to the ffmpeg 
+This code is a heavily simplified and refactored version where functions based on FFmpeg functionality have become calls to the ffmpeg 
 commandline using command line options. Using google it is easy to retrieve custom command lines for use with ffmpeg, 
 these google results can be easily implemented using method FFmpeg.Run.<br>
 <br>
@@ -48,6 +48,8 @@ Support for retrieving meta data from media files has been deleted. If meta data
 suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo). 
 This package is a wrapper for [MediaInfo](https://mediaarea.net/en/MediaInfo) which provides a wealth of information 
 from any video or audio file.
+<br>
+Sample video courtesy of https://sample-videos.com/
 
 
 
