@@ -35,7 +35,7 @@ text
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/jacovis/Javi.FFmpeg/blob/master/LICENSE.txt) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/jacovis/Javi.FFmpeg/blob/master/LICENSE.md) file for details
 
 ## Acknowledgments
 
@@ -50,13 +50,3 @@ This package is a wrapper for [MediaInfo](https://mediaarea.net/en/MediaInfo) wh
 from any video or audio file.
 <br>
 Sample video courtesy of https://sample-videos.com/
-
-
-
-
-
-Licensing
----------  
-- MediaToolkit is licensed under the [MIT license](https://github.com/jacovis/Javi.FFmpeg/LICENSE.md)
-- MediaToolkit uses [FFmpeg](http://ffmpeg.org), a multimedia framework which is licensed under the [LGPLv2.1 license](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html), its source can be downloaded from [here](https://github.com/AydinAdn/MediaToolkit/tree/master/FFmpeg%20src)
-
