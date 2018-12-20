@@ -7,9 +7,9 @@
 
         <PackageId>Javi.FFmpeg</PackageId>
         <PackageDescription>A wrapper for the ffmpeg command line tool.</PackageDescription>
-        <PackageLicenseUrl></PackageLicenseUrl>
-        <PackageProjectUrl></PackageProjectUrl>
-        <PackageIconUrl>PackageIcon.png</PackageIconUrl>
+        <PackageLicenseUrl>https://github.com/jacovis/Javi.FFmpeg/blob/master/LICENSE.md</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/jacovis/Javi.FFmpeg</PackageProjectUrl>
+        <PackageIconUrl>https://github.com/jacovis/Javi.FFmpeg/blob/master/PackageIcon.png</PackageIconUrl>
         <PackageTags>ffmpeg;wrapper</PackageTags>
         <Version>1.0.0</Version>
         <Authors>Jaco Vis</Authors>
