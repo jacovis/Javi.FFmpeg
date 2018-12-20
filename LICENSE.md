@@ -2,14 +2,15 @@ This package is licensed under the [MIT license](https://opensource.org/licenses
 
 ## Can
 Commercial Use
-Modify
-Distribute
-Sublicense
-Private Use
+
+Modify  
+Distribute  
+Sublicense  
+Private Use  
  
 ## Cannot
-Hold Liable
+Hold Liable  
  
 ## Must
-Include Copyright
-Include License
+Include Copyright  
+Include License  
