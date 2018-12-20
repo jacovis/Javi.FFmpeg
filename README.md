@@ -35,7 +35,7 @@ text
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/jacovis/Javi.FFmpeg/blob/master/LICENSE.md) file for details
+This project is licensed under the [MIT License](https://github.com/jacovis/Javi.FFmpeg/blob/master/LICENSE.md).
 
 ## Acknowledgments
 
