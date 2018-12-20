@@ -1,4 +1,4 @@
-# <img align="center" src="./PackageIcon.png">  FFmpeg.Wrapper
+# <img align="center" src="./PackageIcon.png">  Javi.FFmpeg
 
 One Paragraph of project description goes here
 
@@ -12,12 +12,12 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-The code in this package is based on the work from [AydinAdn/MediaToolkit](https://github.com/AydinAdn/MediaToolkit)  
+The code in this package is based on the work from [AydinAdn/MediaToolkit](https://github.com/AydinAdn/MediaToolkit)<br>
 This code is a more simplified version where functions based on ffmpeg functionality are simple calls to the ffmpeg 
-commandline using custom command line options without any intermediary methods. The reason for this is that with using such
-an approach it becomes super easy to use command lines found on numerous sites to use ffmpeg in the myriad of ways
-that is supports with having to implement too much C# code.
-Furthermore the support to retrieve meta data from media files has been deleted. If meta data retrieval is required, I 
+commandline using custom command line options without any intermediary methods. Using google it is easy to retrieve 
+custom command lines for use with ffmpeg, these google results can be easily implemented using the Run method
+in class FFmpeg.  
+The support to retrieve meta data from media files has been deleted. If meta data retrieval is required, I 
 suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo).  
 This package is a wrapper for [MediaInfo](https://mediaarea.net/en/MediaInfo).
 
