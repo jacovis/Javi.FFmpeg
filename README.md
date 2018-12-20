@@ -1,17 +1,35 @@
 # <img align="center" src="./PackageIcon.png">  Javi.FFmpeg
 
-This dotnet standard package provides a C# wrapper for the [FFmpeg](https://ffmpeg.org/) commandline application.<br>
+This [dotnet standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) package 
+provides a wrapper for [FFmpeg](https://ffmpeg.org/).<br>
 FFmpeg is able to convert, decode, encode, transcode, mux, demux, stream, split and slice video and audio files
 supporting pretty much any format out there.<br>
+With this package using ffmpeg from your application is as simple as making a method call and use event listeners for result.
 
+## Features
+- Wraps the commandline tool ffmpeg.exe
+- Provides events for progress, completion and for every line of output from the commandline.
+- ffmpeg proces can be cancelled from code.
+    
 ## Getting Started
 
+### Install package using nuget
+
 Install Javi.FFmpeg from NuGet using the Package Manager Console with the following command 
-(or search on [NuGet Javi.FFmpeg](https://www.nuget.org/packages/Javi.FFmpeg))
 
     PM> Install-Package Javi.FFmpeg
 
-    
+Alternatively search on [NuGet Javi.FFmpeg](https://www.nuget.org/packages/Javi.FFmpeg))
+
+### Download a copy of FFmpeg
+
+Since this package is only a wrapper for FFmpeg, a copy of the ffmpeg.exe application must be available. FFmpeg builds can
+be downloaded using links from the [FFmpeg download site:](https://ffmpeg.org/download.html)<br>
+Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
+
+## Usage 
+
+
 ## Versioning
 
 [SemVer](http://semver.org/) is used for versioning. For the versions available, see the [tags on this repository](https://github.com/jacovis/Javi.FFmpeg/tags).
@@ -23,22 +41,19 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 The code in this package is based on the work from [AydinAdn/MediaToolkit](https://github.com/AydinAdn/MediaToolkit)<br>
-This code is a more simplified version where functions based on ffmpeg functionality are simple calls to the ffmpeg 
-commandline using custom command line options without any intermediary methods. Using google it is easy to retrieve 
-custom command lines for use with ffmpeg, these google results can be easily implemented using the Run method
-in class FFmpeg.<br>
+This code is a simplified version where functions based on FFmpeg functionality have become calls to the ffmpeg 
+commandline using command line options. Using google it is easy to retrieve custom command lines for use with ffmpeg, 
+these google results can be easily implemented using method FFmpeg.Run.<br>
 <br>
-The support to retrieve meta data from media files has been deleted. If meta data retrieval is required, I 
+Support for retrieving meta data from media files has been deleted. If meta data retrieval is required, I 
 suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo).<br>
-This package is a wrapper for [MediaInfo](https://mediaarea.net/en/MediaInfo).
-
+This package is a wrapper for [MediaInfo](https://mediaarea.net/en/MediaInfo) which provides a wealth of information 
+from any video or audio file.
 
 
 
 ## to be removed stuff:
 
-/// see https://github.com/AydinAdn/MediaToolkit
-/// for features and samples.
 /// JV Sep 2018 changes:
 /// - removed the resource embedded ffmpeg.exe executable; the caller must now always specify the path to the executable
 /// - event ConversionCompleteEvent gets called now, the original source did not handle the complete event correctly
