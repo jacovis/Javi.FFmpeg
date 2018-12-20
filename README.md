@@ -1,6 +1,6 @@
 # <img align="center" src="./PackageIcon.png">  Javi.FFmpeg
 
-This [dotnet standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) package 
+This [.NET standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) package 
 provides a wrapper for [FFmpeg](https://ffmpeg.org/).<br>
 FFmpeg is able to convert, decode, encode, transcode, mux, demux, stream, split and slice video and audio files
 supporting pretty much any format out there.<br>
@@ -9,7 +9,7 @@ With this package using ffmpeg from your application is as simple as making a me
 ## Features
 - Wraps the commandline tool ffmpeg.exe
 - Provides events for progress, completion and for every line of output from the commandline.
-- ffmpeg proces can be cancelled from code.
+- ffmpeg process can be cancelled from code.
     
 ## Getting Started
 
@@ -29,20 +29,9 @@ Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 
 ## Usage 
 
-### step 3
+#### step 
 text
 
-#### step 4
-text
-
-##### step 5
-text
-
-###### step 6
-text
-
-####### step 7
-text
 
 ## License
 
