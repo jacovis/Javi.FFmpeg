@@ -43,7 +43,7 @@ commandline using command line options. Using google it is easy to retrieve cust
 these google results can be easily implemented using method FFmpeg.Run.<br>
 <br>
 Support for retrieving meta data from media files has been deleted. If meta data retrieval is required, I 
-suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo).<br>
+suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo). 
 This package is a wrapper for [MediaInfo](https://mediaarea.net/en/MediaInfo) which provides a wealth of information 
 from any video or audio file.
 
