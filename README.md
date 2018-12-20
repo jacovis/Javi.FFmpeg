@@ -1,9 +1,32 @@
-/// MediaToolkit
+# <img align="center" src="./PackageIcon.png">  FFmpeg.Wrapper
+
+One Paragraph of project description goes here
+
+## Versioning
+
+[SemVer](http://semver.org/) is used for versioning. For the versions available, see the [tags on this repository](https://github.com/jacovis/Javi.FFmpeg/tags).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+The code in this package is based on the work from [AydinAdn/MediaToolkit](https://github.com/AydinAdn/MediaToolkit)  
+This code is a more simplified version where functions based on ffmpeg functionality are simple calls to the ffmpeg 
+commandline using custom command line options without any intermediary methods. The reason for this is that with using such
+an approach it becomes super easy to use command lines found on numerous sites to use ffmpeg in the myriad of ways
+that is supports with having to implement too much C# code.
+Furthermore the support to retrieve meta data from media files has been deleted. If meta data retrieval is required, I 
+suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo).  
+This package is a wrapper for [MediaInfo](https://mediaarea.net/en/MediaInfo).
+
+## to be removed stuff:
+
 /// see https://github.com/AydinAdn/MediaToolkit
 /// for features and samples.
 /// JV Sep 2018 changes:
 /// - removed the resource embedded ffmpeg.exe executable; the caller must now always specify the path to the executable
-/// - deleted linux targeted code
 /// - event ConversionCompleteEvent gets called now, the original source did not handle the complete event correctly
 /// - added ExtractSubtitle method
 /// - added CutMedia method; the standard method of cutting media resulted in reencode of the inputfile
@@ -11,6 +34,8 @@
 /// - alle the above methods use the new method FFMpegCommand which is the entry point for calling the ffmpeg executable with an inputfile, outputfile and command line arguments for ffmpeg.
 /// - Removed all code for metdata resolving. If metadata is needed, then the package Javi.MediaInfo is the better choice.
 /// - Refactored code.
+
+
 
 
 MediaToolkit
