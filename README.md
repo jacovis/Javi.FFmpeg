@@ -13,7 +13,7 @@ With this package using ffmpeg from your application is as simple as making a me
     
 ## Getting Started
 
-- Install package using nuget
+    - Install package using nuget
 
 Install Javi.FFmpeg from NuGet using the Package Manager Console with the following command 
 
@@ -21,10 +21,10 @@ Install Javi.FFmpeg from NuGet using the Package Manager Console with the follow
 
 Alternatively search on [NuGet Javi.FFmpeg](https://www.nuget.org/packages/Javi.FFmpeg))
 
-- Download a copy of FFmpeg
+    - Download a copy of FFmpeg
 
 Since this package is only a wrapper for FFmpeg, a copy of the ffmpeg.exe application must be available. FFmpeg builds can
-be downloaded using links from the [FFmpeg download site:](https://ffmpeg.org/download.html)<br>
+be downloaded using links from the [FFmpeg download site](https://ffmpeg.org/download.html).<br>
 Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 
 ## Usage 
