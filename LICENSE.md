@@ -1,8 +1,7 @@
 This package is licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Can
-Commercial Use
-
+Commercial Use  
 Modify  
 Distribute  
 Sublicense  
