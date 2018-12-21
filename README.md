@@ -13,7 +13,7 @@ With this package using ffmpeg from your application is as simple as making a me
     
 ## Getting Started
 
-- _Install package using nuget_
+- Install package using nuget
 
 Install Javi.FFmpeg from NuGet using the Package Manager Console with the following command 
 
@@ -21,7 +21,7 @@ Install Javi.FFmpeg from NuGet using the Package Manager Console with the follow
 
 Alternatively search on [NuGet Javi.FFmpeg](https://www.nuget.org/packages/Javi.FFmpeg)
 
-- _Download a copy of FFmpeg_
+- Download a copy of FFmpeg
 
 Since this package is only a wrapper for FFmpeg, a copy of the ffmpeg.exe application must be available. FFmpeg builds can
 be downloaded using links from the [FFmpeg download site](https://ffmpeg.org/download.html).<br>
@@ -29,17 +29,24 @@ Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 
 ## Usage 
 
-- _The simplest implementation: convert a video file_  
+#### Convert a video file  
   
 Converting the format of a video file is done using the commandline  
-    - ffmpeg -i sample.mp4 sample.mkv  
+_ffmpeg -i sample.mp4 sample.mkv  _
 Implementing this using this package can be done by:
+  
+Add to the usings:
+    using Javi.FFmpeg  
+  
+Call the Run method in the FFmpeg class:
+    using (var ffmpeg = new FFmpeg(FFmpegFileName))
+    {
+        string inputFile = "Sample.mp4";
+        string outputFile = "Sample.mkv";
+        string commandLine = string.Format($"-i \"{inputFile}\" \"{outputFile}\"");
 
-Add  
-using Javi.FFmpeg 
-to your usings.
-
-Convert
+        ffmpeg.Run(inputFile, outputFile, commandLine);
+    }
 
 ## License
 
