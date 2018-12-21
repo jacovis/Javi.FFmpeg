@@ -12,9 +12,10 @@
         <PackageProjectUrl>https://github.com/jacovis/Javi.FFmpeg</PackageProjectUrl>
         <PackageIconUrl>https://github.com/jacovis/Javi.FFmpeg/raw/master/PackageIcon.png</PackageIconUrl>
         <PackageTags>ffmpeg;wrapper</PackageTags>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Authors>Jaco Vis</Authors>
         <Company></Company>
+        <Description>FFmpeg wrapper</Description>
     </PropertyGroup>
 
     <ItemGroup>
