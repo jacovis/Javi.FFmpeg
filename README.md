@@ -9,6 +9,7 @@ With this package, using ffmpeg from your application is as simple as making a m
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Samples of usage](#samples-of-usage)
+- [Demo application](#demo-application)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
@@ -61,6 +62,10 @@ Instantiate an object of class FFmpeg, providing the path to  the local copy off
     }
 
 Since FFmpeg implements the IDisposable interface the code is wrapped in a using statement.
+
+## Demo application
+
+safd
     
 ## License
 
@@ -69,9 +74,9 @@ This project is licensed under the [MIT License](https://github.com/jacovis/Javi
 ## Acknowledgments
 
 The code in this package is based on the work from [AydinAdn/MediaToolkit](https://github.com/AydinAdn/MediaToolkit)<br>
-This code is a heavily simplified and refactored version where functions based on FFmpeg functionality have become calls to the ffmpeg 
+This code is a heavily simplified and refactored version where nethods based on FFmpeg functionality have become calls to the ffmpeg 
 commandline using command line options. Custom command lines for use with ffmpeg are available on lots of support sites such as 
-stackoverflow, experts-exchange and a multitude of blogs. These custom command can be easily implemented using method FFmpeg.Run.<br>
+stackoverflow, experts-exchange and a multitude of blogs. A custom command can be easily implemented using method FFmpeg.Run.<br>
 <br>
 Support for retrieving meta data from media files has been deleted. If meta data retrieval is required, I 
 suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo). 
