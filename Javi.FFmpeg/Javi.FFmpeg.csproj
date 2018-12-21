@@ -25,10 +25,4 @@
         <None Include="..\PackageIcon.png" Link="PackageIcon.png" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="Sample.avi">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
 </Project>

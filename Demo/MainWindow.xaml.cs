@@ -34,7 +34,7 @@ namespace Demo
 
             using (var ffmpeg = new FFmpeg(FFmpegFileName))
             {
-                string inputFile = "Sample.avi";
+                string inputFile = "Sample.mp4";
                 string outputFile = "Sample.mkv";
                 string commandLine = string.Format($"-i \"{inputFile}\" \"{outputFile}\"");
 

@@ -47,6 +47,6 @@ these google results can be easily implemented using method FFmpeg.Run.<br>
 Support for retrieving meta data from media files has been deleted. If meta data retrieval is required, I 
 suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo). 
 This package is a wrapper for [MediaInfo](https://mediaarea.net/en/MediaInfo) which provides a wealth of information 
-from any video or audio file.
+from any video or audio file.<br>
 <br>
 Sample video courtesy of https://sample-videos.com/
