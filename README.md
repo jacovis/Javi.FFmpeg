@@ -30,6 +30,7 @@ Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 ## Usage 
 
 - _The simplest implementation: convert a video file_  
+  
 Converting the format of a video file is done using the commandline  
     - ffmpeg -i sample.mp4 sample.mkv  
 Implementing this using this package can be done by:
