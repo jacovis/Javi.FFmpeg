@@ -33,19 +33,19 @@ Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 
 #### Convert a video file
 
-Converting the format of a video file is done using the commandline  
+Converting the format of a video file on the command line using FFmeg:
 
     ffmpeg -i sample.mp4 sample.mkv
 
-Implementing this using code from this package can be following these steps:
+Implementation using this package:
   
-Add to the usings:
+Add to usings:
 
     using Javi.FFmpeg
 
-Call the Run method in the FFmpeg class:  
+Instantiate an object of class FFmpeg, providing the path to  the local copy off the ffmpeg executable, and call the Run method:
 
-    using (var ffmpeg = new FFmpeg(FFmpegFileName))
+    using (var ffmpeg = new FFmpeg(@"<path_to_your_local_copy_of_ffmpeg>"))
     {
         string inputFile = "Sample.mp4";
         string outputFile = "Sample.mkv";
@@ -54,6 +54,8 @@ Call the Run method in the FFmpeg class:
         ffmpeg.Run(inputFile, outputFile, commandLine);
     }
 
+Since FFmpeg implements the IDisposable interface the code is wrapped in a using statement.
+    
 ## License
 
 This project is licensed under the [MIT License](https://github.com/jacovis/Javi.FFmpeg/blob/master/LICENSE.md).
