@@ -32,13 +32,13 @@ Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 #### Convert a video file  
   
 Converting the format of a video file is done using the commandline  
-_ffmpeg -i sample.mp4 sample.mkv  _
+    ffmpeg -i sample.mp4 sample.mkv
 Implementing this using this package can be done by:
   
-Add to the usings:
+Add to the usings:  
     using Javi.FFmpeg  
   
-Call the Run method in the FFmpeg class:
+Call the Run method in the FFmpeg class:  
     using (var ffmpeg = new FFmpeg(FFmpegFileName))
     {
         string inputFile = "Sample.mp4";
