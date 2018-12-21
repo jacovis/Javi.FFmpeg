@@ -85,20 +85,6 @@ namespace Javi.FFmpeg
         }
 
         /// <summary>
-        /// Extracts the subtitle.
-        /// </summary>
-        /// <param name="inputFile">The input file.</param>
-        /// <param name="outputFile">The output file.</param>
-        /// <param name="subtitleTrack">The subtitle text stream to extract. This number is zero based. Omit to extract the first subtitle stream.</param>
-        /// <param name="cancellationToken">The cancellation token to cancel a running ffmpeg process.</param>
-        public void ExtractSubtitle(string inputFile, string outputFile, int subtitleTrack = 0, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            this.Run(inputFile, outputFile,
-                string.Format($"-i \"{inputFile}\" -vn -an -map 0:s:{subtitleTrack} -c:s:0 srt \"{outputFile}\""),
-                cancellationToken);
-        }
-
-        /// <summary>
         /// Cuts the media.
         /// </summary>
         /// <param name="inputFile">The input file.</param>

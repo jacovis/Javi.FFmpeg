@@ -1,6 +1,7 @@
 ﻿using Javi.FFmpeg;
 using Javi.FFmpeg.Events;
 using Javi.FFmpeg.Exceptions;
+using Javi.FFmpeg.Extensions;
 using Microsoft.Win32;
 using System;
 using System.IO;
