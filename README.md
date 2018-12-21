@@ -42,7 +42,7 @@ Converting the format of a video file on the command line using FFmeg:
 
     ffmpeg -i sample.mp4 sample.mkv
 
-Implementation using this package:
+Implementation of that same command using this package:
   
 Add to usings:
 
