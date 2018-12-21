@@ -15,7 +15,7 @@ With this package, using ffmpeg from your application is as simple as making a m
 
 ## Features
 - Wraps the commandline tool ffmpeg.exe
-- Provides events for progress, completion and for every line of output from the commandline.
+- Provides events for progress, completion and for every line of ffmpeg console output.
 - ffmpeg process can be cancelled from code.
     
 ## Getting Started
@@ -65,7 +65,8 @@ Since FFmpeg implements the IDisposable interface the code is wrapped in a using
 
 #### Demo application
 
-safd
+A C# WPF demo application is available which uses all features of the package. Code from this demo should not be used in production code,
+the code is merely to demonstrate the usage of this FFmpeg package.
     
 ## License
 
