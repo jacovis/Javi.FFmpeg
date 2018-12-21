@@ -6,11 +6,11 @@ FFmpeg is able to convert, decode, encode, transcode, mux, demux, stream, split 
 supporting pretty much any format out there.<br>
 With this package, using ffmpeg from your application is as simple as making a method call and using event listeners for result.
 
-- [Features](features)
-- [Getting Started](getting-started)
-- [Samples of usage](samples-of-usage)
-- [License](license)
-- [Acknowledgments](acknowledgments)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Samples of usage](#samples-of-usage)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
 ## Features
 - Wraps the commandline tool ffmpeg.exe
