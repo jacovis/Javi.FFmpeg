@@ -50,7 +50,7 @@ Add to usings:
 
     using Javi.FFmpeg
 
-Instantiate an object of class FFmpeg, providing the path to  the local copy off the ffmpeg executable, and call the Run method:
+Instantiate an object of class FFmpeg, providing the full path to the local copy of the ffmpeg executable, and call the Run method:
 
     using (var ffmpeg = new FFmpeg(@"<path_to_your_local_copy_of_ffmpeg>"))
     {
@@ -74,9 +74,10 @@ This project is licensed under the [MIT License](https://github.com/jacovis/Javi
 ## Acknowledgments
 
 The code in this package is based on the work from [AydinAdn/MediaToolkit](https://github.com/AydinAdn/MediaToolkit)<br>
-This code is a heavily simplified and refactored version where nethods based on FFmpeg functionality have become calls to the ffmpeg 
-commandline using command line options. Custom command lines for use with ffmpeg are available on lots of support sites such as 
-stackoverflow, experts-exchange and a multitude of blogs. A custom command can be easily implemented using method FFmpeg.Run.<br>
+This code is heavily simplified and refactored beyond recognition, where nethods based on FFmpeg functionality have become calls to the ffmpeg 
+commandline using command line options. Custom command lines for use with ffmpeg are readily available on lots of support sites such as 
+[stackoverflow](), [superuser](https://superuser.com/) and a multitude of [blogs](https://www.ostechnix.com/20-ffmpeg-commands-beginners/) 
+using a good search query. A custom command can be easily implemented using method FFmpeg.Run.<br>
 <br>
 Support for retrieving meta data from media files has been deleted. If meta data retrieval is required, I 
 suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo). 
