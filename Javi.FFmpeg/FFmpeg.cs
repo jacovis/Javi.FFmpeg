@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Threading;
 
@@ -71,51 +70,6 @@ namespace Javi.FFmpeg
 
         #region Methods
         /// <summary>
-        /// Retrieve a thumbnail image from a video file.
-        /// </summary>
-        /// <param name="inputFile">Video file.</param>
-        /// <param name="outputFile">Image file.</param>
-        /// <param name="seekPosition">The seek position.</param>
-        /// <param name="cancellationToken">The cancellation token to cancel a running ffmpeg process.</param>
-        public void GetThumbnail(string inputFile, string outputFile, TimeSpan seekPosition, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            this.Run(inputFile, outputFile,
-                ((FormattableString)$"-ss {seekPosition.TotalSeconds} -i \"{inputFile}\" -vframes 1  \"{outputFile}\"").ToString(CultureInfo.InvariantCulture),
-                cancellationToken);
-        }
-
-        /// <summary>
-        /// Cuts the media.
-        /// </summary>
-        /// <param name="inputFile">The input file.</param>
-        /// <param name="outputFile">The output file.</param>
-        /// <param name="start">The starttime in seconds.</param>
-        /// <param name="end">The endtime in seconds.</param>
-        /// <param name="cancellationToken">The cancellation token to cancel a running ffmpeg process.</param>
-        public void CutMedia(string inputFile, string outputFile, TimeSpan start, TimeSpan end, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            this.Run(inputFile, outputFile,
-                ((FormattableString)$"-ss {start} -to {end} -i \"{inputFile}\" -map 0:v? -c copy  -map 0:a? -c copy -map 0:s? -c copy \"{outputFile}\"").ToString(CultureInfo.InvariantCulture),
-                cancellationToken);
-        }
-
-        /// <summary>
-        /// Converts the audio to ac-3
-        /// </summary>
-        /// <param name="inputFile">The input file.</param>
-        /// <param name="outputFile">The output file.</param>
-        /// <param name="audioTrack">The audio track.</param>
-        /// <param name="bitRate">The bit rate.</param>
-        /// <param name="samplingRate">The sampling rate.</param>
-        /// <param name="cancellationToken">The cancellation token to cancel a running ffmpeg process.</param>
-        public void ConvertAudioAC3(string inputFile, string outputFile, int audioTrack, int bitRate, int samplingRate, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            this.Run(inputFile, outputFile,
-                string.Format($" -hwaccel auto -i \"{inputFile}\" -map {audioTrack} -c:s copy -c:v copy -c:a ac3 -b:a {bitRate}k  -ar {samplingRate} \"{outputFile}\""),
-                cancellationToken);
-        }
-
-        /// <summary>
         /// Call ffmpeg using a custom command.
         /// The ffmpegCommandLine must be a command line ffmpeg can process, including the input file, output file and parameters.
         /// </summary>
@@ -130,7 +84,7 @@ namespace Javi.FFmpeg
                 throw new ArgumentNullException("ffmpegCommand");
             }
 
-            if (!inputFile.StartsWith("http://") && !File.Exists(inputFile))
+            if (!inputFile.StartsWith("http://") && !inputFile.StartsWith("https://") && !File.Exists(inputFile))
             {
                 throw new FileNotFoundException("Input file not found", inputFile);
             }

@@ -29,7 +29,7 @@ namespace Demo
             InitializeComponent();
         }
 
-        private void Run_Click(object sender, RoutedEventArgs e)
+        private void ButtonRun_Click(object sender, RoutedEventArgs e)
         {
             OutputText("***Start FFmpeg");
 
@@ -78,14 +78,14 @@ namespace Demo
                 ffmpeg.OnData += (sender, e) => { OutputText(e.Data); };
 
                 // Grab thumbnails
-                // For this sample thumbnails from 0:00:59 to 0:01:09 are grabbed every 42ms
-                // typical value for framerate (24000/1001) == 23.976 fps === 42 ms
-                // ie grab images for 2 seconds = 2000 ms every 42 ms: do GetThumbnail in a loop for 2000 / 42 = 47 times
-                for (int i = 0; i < (2 * 1000 / 42); i++)
+                // For this sample thumbnails from 0:00:00.000 to 0:00:00.200 are grabbed every 42ms
+                // the loop here assumes a typical value for framerate (24000/1001) == 23.976 fps === 42 ms
+                // ie grab images for 200 milliseconds = 200 ms every 42 ms: do GetThumbnail in a loop for 200 / 42 === 5 times
+                for (int i = 0; i < (2 * 100 / 42); i++)
                 {
                     OutputText(i.ToString());
 
-                    TimeSpan seekPosition = TimeSpan.FromMilliseconds((0 * 60 + 59) * 1000 + i * 42);
+                    TimeSpan seekPosition = TimeSpan.FromMilliseconds((0 * 0 + 0) * 1000 + i * 42);
 
                     int hours = seekPosition.Hours;
                     int minutes = seekPosition.Minutes;
@@ -141,8 +141,7 @@ namespace Demo
 
                 OutputText("***Start cut video");
 
-                // For this sample, cut from the selected file from 00:32:59 to 00:34:00
-                await Task.Run(() => ffmpeg.CutMedia(this.InputFile, outputFile, TimeSpan.FromSeconds(32 * 60 + 59), TimeSpan.FromSeconds(34 * 60 + 0)));
+                await Task.Run(() => ffmpeg.CutMedia(this.InputFile, outputFile, TimeSpan.FromSeconds(0 * 60 + 10), TimeSpan.FromSeconds(0 * 60 + 20)));
 
                 OutputText("***Ready cut video");
             }
