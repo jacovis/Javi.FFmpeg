@@ -29,9 +29,9 @@ Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 
 ## Samples of usage 
 
-- [Convert a video file](#convert-video)
+- [Convert a video file](#convert-a-video-file)
 
-## Convert a video file {#convert-video}
+### Convert a video file
 
 Converting the format of a video file is done using the commandline  
 
