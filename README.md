@@ -8,7 +8,7 @@ With this package, using ffmpeg from your application is as simple as making a m
 
 - [Features](#features)
 - [Getting Started](#getting-started)
-- [Samples of usage](#samples-of-usage)
+- [Usage](#usage)
 - [Demo application](#demo-application)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
@@ -34,9 +34,7 @@ Since this package is only a wrapper for FFmpeg, a copy of the ffmpeg.exe applic
 be downloaded using links from the [FFmpeg download site](https://ffmpeg.org/download.html).<br>
 Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 
-## Samples of usage
-
-- [Convert a video file](#convert-a-video-file)
+## Usage
 
 #### Convert a video file
 
