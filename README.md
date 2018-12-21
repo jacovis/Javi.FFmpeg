@@ -31,13 +31,13 @@ Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 
 - [Convert a video file](#convert-video)
 
-#### Convert a video file
+## Convert a video file {#convert-video}
 
 Converting the format of a video file is done using the commandline  
 
     ffmpeg -i sample.mp4 sample.mkv
 
-Implementing this using this package can be done by:
+Implementing this using code from this package can be following these steps:
   
 Add to the usings:
 
