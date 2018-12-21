@@ -4,7 +4,13 @@ This [.NET standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standa
 provides a wrapper for [FFmpeg](https://ffmpeg.org/).<br>
 FFmpeg is able to convert, decode, encode, transcode, mux, demux, stream, split and slice video and audio files
 supporting pretty much any format out there.<br>
-With this package using ffmpeg from your application is as simple as making a method call and use event listeners for result.
+With this package, using ffmpeg from your application is as simple as making a method call and using event listeners for result.
+
+- [Features](features)
+- [Getting Started](getting-started)
+- [Samples of usage](samples-of-usage)
+- [License](license)
+- [Acknowledgments](acknowledgments)
 
 ## Features
 - Wraps the commandline tool ffmpeg.exe
@@ -27,7 +33,7 @@ Since this package is only a wrapper for FFmpeg, a copy of the ffmpeg.exe applic
 be downloaded using links from the [FFmpeg download site](https://ffmpeg.org/download.html).<br>
 Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 
-## Samples of usage 
+## Samples of usage
 
 - [Convert a video file](#convert-a-video-file)
 
