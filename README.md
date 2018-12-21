@@ -70,8 +70,8 @@ This project is licensed under the [MIT License](https://github.com/jacovis/Javi
 
 The code in this package is based on the work from [AydinAdn/MediaToolkit](https://github.com/AydinAdn/MediaToolkit)<br>
 This code is a heavily simplified and refactored version where functions based on FFmpeg functionality have become calls to the ffmpeg 
-commandline using command line options. Using google it is easy to retrieve custom command lines for use with ffmpeg, 
-these google results can be easily implemented using method FFmpeg.Run.<br>
+commandline using command line options. Custom command lines for use with ffmpeg are available on lots of support sites such as 
+stackoverflow, experts-exchange and a multitude of blogs. These custom command can be easily implemented using method FFmpeg.Run.<br>
 <br>
 Support for retrieving meta data from media files has been deleted. If meta data retrieval is required, I 
 suggest to use [Javi.MediaInfo](https://github.com/jacovis/Javi.MediaInfo). 
