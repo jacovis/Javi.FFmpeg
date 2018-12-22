@@ -64,8 +64,8 @@ Since FFmpeg implements the IDisposable interface the code is wrapped in a using
 
 Class FFmpegExtensions.cs provides extension methods on class FFmpeg where the FFmpeg.Run method is called with 
 a commandline for specific tasks such as extracting a subtitle from a video file, extracting a thumbnail image from 
-a video file or to cut a specific part out of a video or audio file. These extenstion methods provide examples of use 
-of the Run method which can be used in a similar way in an application that consumes this package.
+a video file or to cut a specific part out of a video or audio file. These extension methods provide examples of use. 
+An application consuming this package could have its own specific extension methods implemented in a similar way.
 
 ### Demo application
 
