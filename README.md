@@ -9,7 +9,6 @@ With this package, using ffmpeg from your application is as simple as making a m
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
-- [Demo application](#demo-application)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
@@ -36,7 +35,7 @@ Windows builds can be downloaded from https://ffmpeg.zeranoe.com/builds/
 
 ## Usage
 
-#### Convert a video file
+### Convert a video file
 
 Converting the format of a video file on the command line using FFmeg:
 
@@ -61,7 +60,14 @@ Instantiate an object of class FFmpeg, providing the full path to the local copy
 
 Since FFmpeg implements the IDisposable interface the code is wrapped in a using statement.
 
-#### Demo application
+### Extension methods
+
+Class FFmpegExtensions.cs provides extension methods on class FFmpeg where the FFmpeg.Run method is called with 
+a commandline for specific tasks such as extracting a subtitle from a video file, extracting a thumbnail image from 
+a video file or to cut a specific part out of a video or audio file. These extenstion methods provide examples of use 
+of the Run method which can be used in a similar way in an application that consumes this package.
+
+### Demo application
 
 A C# WPF demo application is available which uses all features of the package. Code from this demo should not be used in production code,
 the code is merely to demonstrate the usage of this FFmpeg package.
