@@ -79,7 +79,7 @@ This project is licensed under the [MIT License](https://github.com/jacovis/Javi
 ## Acknowledgments
 
 The code in this package is based on the work from [AydinAdn/MediaToolkit](https://github.com/AydinAdn/MediaToolkit)<br>
-This code is heavily simplified and refactored beyond recognition, where nethods based on FFmpeg functionality have become calls to the ffmpeg 
+This code is heavily simplified and refactored beyond recognition, where methods based on FFmpeg functionality have become calls to the ffmpeg 
 commandline using command line options. Custom command lines for use with ffmpeg are readily available on lots of support sites such as 
 [stackoverflow](), [superuser](https://superuser.com/) and a multitude of [blogs](https://www.ostechnix.com/20-ffmpeg-commands-beginners/) 
 using a good search query. A custom command can be easily implemented using method FFmpeg.Run.<br>
