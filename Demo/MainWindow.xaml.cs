@@ -22,7 +22,7 @@ namespace Demo
 
         private string InputFile;
 
-        // Note that the cancellation is only implemented in this demo in method ButtonConvertEAC_Click
+        // Note that cancellation is only implemented in this demo in method ButtonConvertEAC_Click
         private CancellationTokenSource CancellationTokenSource;
 
         public MainWindow()

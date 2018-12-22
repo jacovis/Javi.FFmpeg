@@ -3,9 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Javi.FFmpeg", "Javi.FFmpeg\Javi.FFmpeg.csproj", "{124AB335-EEAC-416F-B06B-80AD3CF56E38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Javi.FFmpeg", "Javi.FFmpeg\Javi.FFmpeg.csproj", "{124AB335-EEAC-416F-B06B-80AD3CF56E38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{7F466283-A508-450B-9A9C-85865EADC1FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{705DB14F-8113-4C31-8E13-1CE5C831B752}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+		release-nuget-package.cmd = release-nuget-package.cmd
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
