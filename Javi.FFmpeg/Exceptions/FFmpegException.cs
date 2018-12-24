@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Javi.FFmpeg.Exceptions
+namespace Javi.FFmpeg
 {
     public class FFmpegException : Exception
     {

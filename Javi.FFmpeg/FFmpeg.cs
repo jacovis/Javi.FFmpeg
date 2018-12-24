@@ -1,6 +1,4 @@
-﻿using Javi.FFmpeg.Events;
-using Javi.FFmpeg.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;

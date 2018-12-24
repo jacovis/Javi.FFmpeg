@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Javi.FFmpeg.Events
+namespace Javi.FFmpeg
 {
     public class FFmpegCompletedEventArgs : EventArgs
     {

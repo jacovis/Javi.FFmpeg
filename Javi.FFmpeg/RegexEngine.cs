@@ -1,4 +1,3 @@
-using Javi.FFmpeg.Events;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
