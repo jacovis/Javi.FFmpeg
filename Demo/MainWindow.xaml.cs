@@ -118,10 +118,16 @@ namespace Demo
 
                 OutputText("***Start extract srt");
 
-                await Task.Run(() => ffmpeg.ExtractSubtitle(this.InputFile, Path.ChangeExtension(InputFile, "srt"), 0));
+                try
+                {
+                    await Task.Run(() => ffmpeg.ExtractSubtitle(this.InputFile, Path.ChangeExtension(InputFile, "srt"), 0));
+                }
+                catch (Exception ex)
+                {
+                    OutputText("!!!! Exception: " + ex.Message);
+                }
 
                 OutputText("***Ready extract srt");
-
             }
         }
 
