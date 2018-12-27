@@ -70,8 +70,8 @@ An application consuming this package could have its own specific extension meth
 
 ### Demo application
 
-A C# WPF demo application is available which uses all features of the package. Code from this demo should not be used in production code,
-the code is merely to demonstrate the usage of this FFmpeg package.
+A C# WPF [demo application](https://github.com/jacovis/Javi.FFmpeg/tree/master/Demo) is available which uses all features of the package. 
+Code from this demo should not be used in production code, the code is merely to demonstrate the usage of this FFmpeg package.
     
 ## License
 
