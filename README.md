@@ -1,6 +1,6 @@
 # <img align="center" src="./PackageIcon.png">  Javi.FFmpeg
 
-This [.NET standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) package 
+This [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) package 
 provides a wrapper for [FFmpeg](https://ffmpeg.org/).<br>
 FFmpeg is able to convert, decode, encode, transcode, mux, demux, stream, split and slice video and audio files
 supporting pretty much any format out there.<br>
