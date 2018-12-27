@@ -6,14 +6,14 @@
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <Title>FFmpeg wrapper</Title>
         <PackageId>Javi.FFmpeg</PackageId>
-        <PackageDescription>A wrapper for the ffmpeg command line tool.</PackageDescription>
+        <PackageDescription>A dot .NET standard wrapper for the ffmpeg command line tool.</PackageDescription>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageProjectUrl>https://github.com/jacovis/Javi.FFmpeg</PackageProjectUrl>
         <RepositoryUrl>https://github.com/jacovis/Javi.FFmpeg</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageIconUrl>https://github.com/jacovis/Javi.FFmpeg/raw/master/PackageIcon.png</PackageIconUrl>
         <PackageTags>ffmpeg;wrapper;wrap;audio;video;mp3;wma;mkv;mp4</PackageTags>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
         <Authors>Jaco Vis</Authors>
         <Company>JaVi</Company>
         <Description>FFmpeg wrapper</Description>
