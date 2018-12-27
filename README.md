@@ -15,6 +15,7 @@ With this package, using ffmpeg from your application is as simple as making a m
 ## Features
 - Wraps the commandline tool ffmpeg.exe
 - Provides events for progress, completion and for every line of ffmpeg console output.
+- Targets .NET Standard 2.0
 - ffmpeg process can be cancelled from code.
     
 ## Getting Started
