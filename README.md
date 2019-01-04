@@ -1,4 +1,4 @@
-[![NuGet](https://img.shields.io/nuget/v/Javi.FFmpeg.svg?maxAge=2592000?style=plastic)](https://www.nuget.org/packages/Javi.FFmpeg/) 
+[![NuGet](https://img.shields.io/nuget/v/Javi.FFmpeg.svg)](https://www.nuget.org/packages/Javi.FFmpeg/) 
 
 # <img align="center" src="./PackageIcon.png">  Javi.FFmpeg
 
