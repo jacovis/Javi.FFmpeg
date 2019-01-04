@@ -1,3 +1,5 @@
+[![NuGet](https://img.shields.io/nuget/v/Javi.FFmpeg.svg?maxAge=2592000?style=plastic)](https://www.nuget.org/packages/Javi.FFmpeg/) 
+
 # <img align="center" src="./PackageIcon.png">  Javi.FFmpeg
 
 This [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) package 
