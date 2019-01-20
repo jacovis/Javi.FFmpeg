@@ -188,6 +188,34 @@ namespace Demo
             }
         }
 
+        private async void ButtonStream_Click(object sender, RoutedEventArgs e)
+        {
+            string ffmpegCommand = @"ffmpeg -re -i udp://224.2.2.8:1008 -map 0:p:40 -map 0:p:29 -map 0:p:42 -map 0:p:17 -map 0:p:19 -vcodec mpeg2video -s 720x576 -r 25 -flags cgop+ilme -sc_threshold 1000000000 -b:v 2M -minrate:v 2M -maxrate:v 2M -bufsize:v 1.4M -acodec mp2 -ac 2 -b:a 192k -program title=xyz:st=0:st=1 -program title=zz:st=2:st=3 -program title=z2:st=4:st=5 -program title=SriShankara:st=6:st=7 -program title=Shubhvarta:st=8:st=9 -f mpegts udp://230.0.0.5:1008?pkt_size=1316";
+            using (var ffmpeg = new FFmpeg(FFmpegFileName))
+            {
+                ffmpeg.OnProgress += OnProgressEvent;
+                ffmpeg.OnCompleted += OnCompletedEvent;
+                ffmpeg.OnData += (s, args) => { OutputText(args.Data); };
+
+                OutputText("***Start capturing stream");
+
+                try
+                {
+                    await Task.Run(() => ffmpeg.Run(ffmpegCommand, string.Empty, ffmpegCommand));
+                }
+                catch (FFmpegException fe)
+                {
+                    OutputText(fe.Message + (fe.InnerException == null ? "" : ", " + fe.InnerException.Message));
+                }
+                catch (Exception ex)
+                {
+                    OutputText(ex.Message);
+                }
+
+                OutputText("***Ready capturing stream");
+            }
+        }
+
         private void OnProgressEvent(object sender, FFmpegProgressEventArgs e)
         {
             var sb = new StringBuilder();
