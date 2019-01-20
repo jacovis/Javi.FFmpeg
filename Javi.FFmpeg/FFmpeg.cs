@@ -82,11 +82,6 @@ namespace Javi.FFmpeg
                 throw new ArgumentNullException("ffmpegCommand");
             }
 
-            if (!inputFile.StartsWith("http://") && !inputFile.StartsWith("https://") && !File.Exists(inputFile))
-            {
-                throw new FileNotFoundException("Input file not found", inputFile);
-            }
-
             this.FFmpegRunner(inputFile, outputFile, ffmpegCommandLine, cancellationToken);
         }
         

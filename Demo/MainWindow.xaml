@@ -31,6 +31,7 @@
                 <Button Content="Extract srt" Height="25" MinWidth="75" Margin="5" Click="ButtonExtractSrt_Click"/>
                 <Button Content="Cut video" Height="25" MinWidth="75" Margin="5" Click="ButtonCutVideo_Click" />
                 <Button Content="Convert EAC" Height="25" MinWidth="75" Margin="5" Click="ButtonConvertEAC_Click" />
+                <Button Content="Stream" Height="25" MinWidth="75" Margin="5" Click="ButtonStream_Click" />
             </StackPanel>
             
         </Grid>
