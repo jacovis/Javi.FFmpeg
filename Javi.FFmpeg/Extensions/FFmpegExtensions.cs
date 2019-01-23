@@ -59,7 +59,7 @@ namespace Javi.FFmpeg.Extensions
         public static void ConvertAudioAC3(this FFmpeg ffmpeg, string inputFile, string outputFile, int audioTrack, int bitRate, int samplingRate, CancellationToken cancellationToken = default(CancellationToken))
         {
             ffmpeg.Run(inputFile, outputFile,
-                string.Format($" -hwaccel auto -i \"{inputFile}\" -map {audioTrack} -c:s copy -c:v copy -c:a ac3 -b:a {bitRate}k  -ar {samplingRate} \"{outputFile}\""),
+                string.Format($" -hwaccel auto -i \"{inputFile}\" -map {audioTrack} -c:s copy -c:v copy -c:a ac3 -b:a {bitRate} -ar {samplingRate} \"{outputFile}\""),
                 cancellationToken);
         }
 
