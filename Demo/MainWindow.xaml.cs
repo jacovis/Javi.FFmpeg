@@ -74,17 +74,17 @@ namespace Demo
             using (var ffmpeg = new FFmpeg(FFmpegFileName))
             {
                 ffmpeg.OnCompleted += (sender, e) => { OutputText(string.Format($"complete event: {e.MuxingOverhead} {e.TotalDuration}")); };
-                ffmpeg.OnData += (sender, e) => { OutputText(e.Data); };
 
                 // Grab thumbnails
-                // For this sample thumbnails from 0:00:00.000 to 0:00:00.200 are grabbed every 42ms
-                // the loop here assumes a typical value for framerate (24000/1001) == 23.976 fps === 42 ms
-                // ie grab images for 200 milliseconds = 200 ms every 42 ms: do GetThumbnail in a loop for 200 / 42 === 5 times
-                for (int i = 0; i < (2 * 100 / 42); i++)
+                // For this sample thumbnails from 0:07:28.600 to 0:07:54.200 are grabbed every 42ms
+                // the loop here assumes a typical value for framerate: (24000/1001) == 23.976 fps === 42 ms
+                int startPosition = (7 * 60 + 28) * 1000 + 600; // start at 7min54sec mark, in milliseconds
+                int duration = (0 * 60 + 25) * 1000 + 600; // duration to grab is 25sec and 600 milliseconds, in milliseconds
+                for (int i = 0; i < (duration / 42); i++)
                 {
-                    OutputText(i.ToString());
+                    OutputText(string.Format($"{i} / {(int)(duration / 42)}"));
 
-                    TimeSpan seekPosition = TimeSpan.FromMilliseconds((0 * 0 + 0) * 1000 + i * 42);
+                    TimeSpan seekPosition = TimeSpan.FromMilliseconds(startPosition + i * 42);
 
                     int hours = seekPosition.Hours;
                     int minutes = seekPosition.Minutes;
@@ -146,7 +146,7 @@ namespace Demo
 
                 OutputText("***Start cut video");
 
-                await Task.Run(() => ffmpeg.CutMedia(this.InputFile, outputFile, TimeSpan.FromSeconds(0 * 60 + 10), TimeSpan.FromSeconds(0 * 60 + 20)));
+                await Task.Run(() => ffmpeg.CutMedia(this.InputFile, outputFile, TimeSpan.FromMilliseconds((7 * 60 + 28) * 1000 + 600), TimeSpan.FromMilliseconds((7 * 60 + 54) * 1000 + 200)));
 
                 OutputText("***Ready cut video");
             }
