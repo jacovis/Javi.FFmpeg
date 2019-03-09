@@ -14,7 +14,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageIconUrl>https://github.com/jacovis/Javi.FFmpeg/raw/master/PackageIcon.png</PackageIconUrl>
         <PackageTags>ffmpeg;wrapper;wrap;audio;video;mp3;wma;mkv;mp4</PackageTags>
-        <Version>1.1.0</Version>
+        <Version>1.2.0</Version>
         <Authors>Jaco Vis</Authors>
         <Company>JaVi</Company>
         <Description>FFmpeg wrapper</Description>

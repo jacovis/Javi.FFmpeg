@@ -56,12 +56,25 @@ namespace Javi.FFmpeg.Extensions
         /// <param name="bitRate">The bit rate.</param>
         /// <param name="samplingRate">The sampling rate.</param>
         /// <param name="cancellationToken">The cancellation token to cancel a running ffmpeg process.</param>
-        public static void ConvertAudioAC3(this FFmpeg ffmpeg, string inputFile, string outputFile, int audioTrack, int bitRate, int samplingRate, CancellationToken cancellationToken = default(CancellationToken))
+        public static void ConvertAudioToAC3(this FFmpeg ffmpeg, string inputFile, string outputFile, int audioTrack, int bitRate, int samplingRate, CancellationToken cancellationToken = default(CancellationToken))
         {
             ffmpeg.Run(inputFile, outputFile,
                 string.Format($" -hwaccel auto -i \"{inputFile}\" -map {audioTrack} -c:s copy -c:v copy -c:a ac3 -b:a {bitRate} -ar {samplingRate} \"{outputFile}\""),
                 cancellationToken);
         }
 
+        /// <summary>
+        /// Converts the video to avc/h264
+        /// </summary>
+        /// <param name="inputFile">The input file.</param>
+        /// <param name="outputFile">The output file.</param>
+        /// <param name="videoTrack">The video track.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel a running ffmpeg process.</param>
+        public static void ConvertVideoToAVC(this FFmpeg ffmpeg, string inputFile, string outputFile, int videoTrack, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            ffmpeg.Run(inputFile, outputFile,
+                string.Format($" -hwaccel auto -i \"{inputFile}\" -map {videoTrack} -c:a copy -c:s copy -c:v libx264 \"{outputFile}\""),
+                cancellationToken);
+        }
     }
 }

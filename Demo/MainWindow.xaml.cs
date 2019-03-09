@@ -172,7 +172,7 @@ namespace Demo
                     using (this.CancellationTokenSource = new CancellationTokenSource())
                     {
                         var token = this.CancellationTokenSource.Token;
-                        await Task.Run(() => ffmpeg.ConvertAudioAC3(this.InputFile, outputFile, 0, 640000, 48000, token), token);
+                        await Task.Run(() => ffmpeg.ConvertAudioToAC3(this.InputFile, outputFile, 0, 640000, 48000, token), token);
                     }
                 }
                 catch (OperationCanceledException)
